@@ -24,7 +24,7 @@ class FireDialog {
         content: Column(
           children: [
             20.hb,
-            Text(getTitle(alarmModel),style: TextStyle(color: Colors.black,fontSize: 34.sp),),
+            Text(getTitle(alarmModel),style: TextStyle(color: Colors.black,fontSize: 32.sp),),
 
             10.hb,
 
