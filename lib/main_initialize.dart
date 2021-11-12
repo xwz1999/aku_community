@@ -100,6 +100,7 @@ class MainInitialize {
       consolePrint: false,
       onReceiveMes: (message) async {
         await FireDialog.fireAlarm(message);
+        LoggerData.addData(message);
       },
       onError: (e) {
         LoggerData.addData(e);
