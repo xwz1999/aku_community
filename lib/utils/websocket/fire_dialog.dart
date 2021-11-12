@@ -23,10 +23,12 @@ class FireDialog {
         title: getImage(alarmModel),
         content: Column(
           children: [
-            Text(getTitle(alarmModel)),
+            20.hb,
+            Text(getTitle(alarmModel),style: TextStyle(color: Colors.black,fontSize: 34.sp),),
 
             10.hb,
-            Text(getContent(alarmModel)),
+
+            Text(getContent(alarmModel),style: TextStyle(color: Colors.black,fontSize: 26.sp),textAlign: TextAlign.start,),
 
           ],
         ),
@@ -81,11 +83,11 @@ class FireDialog {
   static Widget getImage(AlarmModel alarmModel){
     switch(alarmModel.type){
       case 1:
-        return Image.asset(R.ASSETS_ICONS_FIRE_ALARM_PNG,width: 110.w,height: 110.w,fit: BoxFit.fill,);
+        return Image.asset(R.ASSETS_ICONS_FIRE_ALARM_PNG,width: 100.w,height: 100.w,fit: BoxFit.fitHeight,);
       case 2:
-        return Image.asset(R.ASSETS_ICONS_DEVICE_ALARM_PNG,width: 110.w,height: 110.w,fit: BoxFit.fill,);
+        return Image.asset(R.ASSETS_ICONS_DEVICE_ALARM_PNG,width: 100.w,height: 100.w,fit: BoxFit.fitHeight,);
       case 3:
-        return Image.asset(R.ASSETS_ICONS_APP_ALARM_PNG,width: 110.w,height: 110.w,fit: BoxFit.fill,);
+        return Image.asset(R.ASSETS_ICONS_APP_ALARM_PNG,width: 100.w,height: 100.w,fit: BoxFit.fitHeight,);
       default:
         return SizedBox();
 
