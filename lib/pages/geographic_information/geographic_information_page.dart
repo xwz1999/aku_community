@@ -55,7 +55,7 @@ class _GeographicInformationPageState extends State<GeographicInformationPage> {
                     placeholder: R.ASSETS_IMAGES_PLACEHOLDER_WEBP,
                     fit: BoxFit.cover,
                     image: API
-                        .image(ImgModel.first(_model.imgUrls))),
+                        .image(ImgModel.first(_model.imgList))),
                 width: double.infinity,
                 height: 424.w,
               ),

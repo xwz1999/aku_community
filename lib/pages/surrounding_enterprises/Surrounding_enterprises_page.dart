@@ -28,18 +28,10 @@ class SurroundingEnterprisesPage extends StatefulWidget {
 
 class _SurroundingEnterprisesPageState extends State<SurroundingEnterprisesPage> {
   EasyRefreshController _refreshController = EasyRefreshController();
-  int _page = 1;
-  int _size = 10;
+
   @override
   void initState() {
     super.initState();
-    // Future.delayed(Duration(milliseconds: 0), () async {
-    //   var agreement = await HiveStore.appBox?.get('IndustryCommitteePage') ?? false;
-    //   if (!agreement) {
-    //     await TipsDialog.tipsDialog();
-    //     HiveStore.appBox!.put('IndustryCommitteePage',true);
-    //   }
-    // });
 
   }
 
@@ -52,8 +44,10 @@ class _SurroundingEnterprisesPageState extends State<SurroundingEnterprisesPage>
       child: Container(
         padding: EdgeInsets.all(20.w),
         color: Colors.white,
+        width:750.w,
         height: 250.w,
-        child: Row(
+        child:
+        Row(
           //  .padding(EdgeInsets.all(20.w)).white.withRounded(value: 8.w).make()
 
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,18 +57,17 @@ class _SurroundingEnterprisesPageState extends State<SurroundingEnterprisesPage>
               child: FadeInImage.assetNetwork(
                 placeholder: R.ASSETS_IMAGES_PLACEHOLDER_WEBP,
                 image: API.image(ImgModel.first(model.imgList)),
-                height: 200.w,
-                width: 240.w,
+                height: 194.w,
+                width: 209.w,
                 fit: BoxFit.fill,
               ),
             ),
             24.wb,
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  width: 440.w,
+                  width: 430.w,
                   child: Text(
                     '${model.name}',
                     style: TextStyle(
@@ -88,7 +81,7 @@ class _SurroundingEnterprisesPageState extends State<SurroundingEnterprisesPage>
                 ),
                 20.hb,
                 Container(
-                  width: 440.w,
+                  width: 400.w,
                   child: Text(
                     '${model.content}',
                     style: TextStyle(
@@ -102,6 +95,7 @@ class _SurroundingEnterprisesPageState extends State<SurroundingEnterprisesPage>
                 ),
                 Spacer(),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     '南宁人才公寓'
                         .text
@@ -109,7 +103,7 @@ class _SurroundingEnterprisesPageState extends State<SurroundingEnterprisesPage>
                         .color(ktextThirdColor)
                         .make(),
                     Spacer(),
-                    '发布于：${model.getReleaseDate}'
+                    '发布于${model.getReleaseDate.toString().substring(5,16)}'
                         .text
                         .size(20.sp)
                         .color(ktextThirdColor)
@@ -117,7 +111,7 @@ class _SurroundingEnterprisesPageState extends State<SurroundingEnterprisesPage>
                   ],
                 )
               ],
-            ),
+            ).expand(),
           ],
         ),
       ),
@@ -130,7 +124,7 @@ class _SurroundingEnterprisesPageState extends State<SurroundingEnterprisesPage>
       systemStyle: SystemStyle.genStyle(bottom: Color(0xFF2A2A2A)),
       body: BeeListView<SurroundingEnterprisesModel>(
         path: API.manager.surroundingEnterprises,
-        extraParams: {'pageNum': _page, 'size': _size},
+
         convert: (model) {
           return model.tableList!
               .map((e) => SurroundingEnterprisesModel.fromJson(e))
@@ -139,9 +133,9 @@ class _SurroundingEnterprisesPageState extends State<SurroundingEnterprisesPage>
         controller: _refreshController,
         builder: (items) {
           return ListView.separated(
-            padding: EdgeInsets.symmetric(vertical: 20.w),
             itemBuilder: (context, index) {
               return _buildCard(items[index]);
+
             },
             separatorBuilder: (context, index) => 20.hb,
             itemCount: items.length,

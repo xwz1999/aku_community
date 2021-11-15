@@ -28,6 +28,7 @@
 /dev/docs/flutter.docs.zip
 /dev/docs/lib/
 /dev/docs/pubspec.yaml
+/dev/docs/tool/config.dart
 /packages/flutter/coverage/
 version
 

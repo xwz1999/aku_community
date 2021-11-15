@@ -6,23 +6,23 @@ class GeographicInformationModel {
   String? name;
   String? content;
   String? createDate;
-  List<ImgModel>? imgUrls;
+  List<ImgModel>? imgList;
 
   DateTime? get getCreateDate => DateUtil.getDateTime(createDate!);
 
   GeographicInformationModel(
-      {this.id, this.name, this.content, this.createDate, this.imgUrls});
+      {this.id, this.name, this.content, this.createDate, this.imgList});
 
   GeographicInformationModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     content = json['content'];
     createDate = json['createDate'];
-    if (json['imgUrls'] != null) {
-      imgUrls =
-          (json['imgUrls'] as List).map((e) => ImgModel.fromJson(e)).toList();
+    if (json['imgList'] != null) {
+      imgList =
+          (json['imgList'] as List).map((e) => ImgModel.fromJson(e)).toList();
     } else
-      imgUrls = [];
+      imgList = [];
   }
 
   Map<String, dynamic> toJson() {
@@ -31,8 +31,8 @@ class GeographicInformationModel {
     data['name'] = this.name;
     data['content'] = this.content;
     data['createDate'] = this.createDate;
-    if (this.imgUrls != null) {
-      data['imgUrls'] = this.imgUrls!.map((v) => v.toJson()).toList();
+    if (this.imgList != null) {
+      data['imgList'] = this.imgList!.map((v) => v.toJson()).toList();
     }
     return data;
   }
