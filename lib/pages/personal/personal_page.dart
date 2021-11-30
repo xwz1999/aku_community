@@ -7,10 +7,10 @@ import 'package:aku_community/pages/setting_page/settings_page.dart';
 import 'package:aku_community/pages/sign/sign_in_page.dart';
 import 'package:aku_community/painters/user_bottom_bar_painter.dart';
 import 'package:aku_community/provider/user_provider.dart';
+import 'package:aku_community/ui/market/order/order_page.dart';
 import 'package:aku_community/ui/profile/car/car_manage_page.dart';
 import 'package:aku_community/ui/profile/car_parking/car_parking_page.dart';
 import 'package:aku_community/ui/profile/house/house_owners_page.dart';
-import 'package:aku_community/ui/profile/order/order_page.dart';
 import 'package:aku_community/utils/headers.dart';
 import 'package:aku_community/widget/others/user_tool.dart';
 import 'package:aku_community/widget/views/application_view.dart';
@@ -20,6 +20,8 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+
+import 'address/address_list_page.dart';
 
 class PersonalIndex extends StatefulWidget {
   final bool? isSign;
@@ -51,12 +53,12 @@ class _PersonalIndexState extends State<PersonalIndex>
               right: 0,
               bottom: 0,
               child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(R.ASSETS_IMAGES_MINE_BG_PNG),
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                // decoration: BoxDecoration(
+                //   image: DecorationImage(
+                //     image: AssetImage(R.ASSETS_ICONS_ICON_MY_SETTING_PNG),
+                //     fit: BoxFit.cover,
+                //   ),
+                // ),
                 child: Column(
                   children: [
                     Spacer(),
@@ -203,57 +205,7 @@ class _PersonalIndexState extends State<PersonalIndex>
   Widget build(BuildContext context) {
     final double _statusHeight = MediaQuery.of(context).padding.top;
     final userProvider = Provider.of<UserProvider>(context);
-    // var orderWidget = SliverToBoxAdapter(
-    //   child: Container(
-    //     decoration: BoxDecoration(
-    //       color: Color(0xffffffff),
-    //       borderRadius: BorderRadius.all(Radius.circular(8)),
-    //       boxShadow: <BoxShadow>[
-    //         BoxShadow(
-    //           color: Colors.grey.withOpacity(0.1),
-    //           offset: Offset(1, 1),
-    //         ),
-    //       ],
-    //     ),
-    //     margin: EdgeInsets.all(20.w),
-    //     padding: EdgeInsets.all(12.w),
-    //     child:
-    //   Column(
-    //     mainAxisSize: MainAxisSize.min,
-    //     children: [
-    //       _containerBar('我的订单'),
-    //       GridView(
-    //         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-    //           crossAxisCount: 5,
-    //         ),
-    //         shrinkWrap: true,
-    //         children: [
-    //           _orderButton(
-    //             name: '待付款',
-    //             path: R.ASSETS_ICONS_USER_ICON_DFK_PNG,
-    //             index: 1,
-    //           ),
-    //           _orderButton(
-    //             name: '待收货',
-    //             path: R.ASSETS_ICONS_USER_ICON_DSH_PNG,
-    //             index: 2,
-    //           ),
-    //           _orderButton(
-    //             name: '待评价',
-    //             path: R.ASSETS_ICONS_USER_ICON_DPJ_PNG,
-    //             index: 3,
-    //           ),
-    //           _orderButton(
-    //             name: '售后',
-    //             path: R.ASSETS_ICONS_USER_ICON_SH_PNG,
-    //             index: 4,
-    //           ),
-    //         ],
-    //       ),
-    //     ],
-    //   ),
-    //   )
-    // );
+
     return Scaffold(
 
       body: EasyRefresh(
@@ -403,10 +355,10 @@ class _PersonalIndexState extends State<PersonalIndex>
                           width: 72.w,
                             height: 40.w,
                             alignment: Alignment.center,
-                            child: Image.asset(R.ASSETS_ICONS_ICON_SETTING_PNG,width: 40.w,height: 40.w),
+                            child: Image.asset(R.ASSETS_ICONS_ICON_MY_SETTING_PNG,width: 40.w,height: 40.w),
                         ),
                       ),
-                      // 32.wb,
+                      24.wb,
                     ],
                   ),
 
@@ -538,7 +490,9 @@ class _PersonalIndexState extends State<PersonalIndex>
                     Column(
                      //mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _homeTitle('我的订单', () {}, '查看全部'),
+                        _homeTitle('我的订单', () {
+                          Get.to(() => OrderPage(initIndex: 0));
+                        }, '查看全部'),
                         50.hb,
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -551,17 +505,17 @@ class _PersonalIndexState extends State<PersonalIndex>
                               index: 1,
                             ),
                             _orderButton(
-                              name: '待收货',
+                              name: '待发货',
                               path: R.ASSETS_ICONS_USER_ICON_DSH_PNG,
                               index: 2,
                             ),
                             _orderButton(
-                              name: '待评价',
+                              name: '待收货',
                               path: R.ASSETS_ICONS_USER_ICON_DPJ_PNG,
                               index: 3,
                             ),
                             _orderButton(
-                              name: '售后',
+                              name: '已完成',
                               path: R.ASSETS_ICONS_USER_ICON_SH_PNG,
                               index: 4,
                             ),
@@ -586,15 +540,18 @@ class _PersonalIndexState extends State<PersonalIndex>
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _function('我的房屋', R.ASSETS_ICONS_USER_ICON_WDFW_PNG, () => HouseOwnersPage(
+                        _function('我的房屋', R.ASSETS_ICONS_ICON_MY_HOUSE_PNG, () => HouseOwnersPage(
                           identify: UserTool.userProvider.userDetailModel!.type ?? 4,
-                        ),userProvider.userDetailModel!.estateNames?[0]??'',),
+                        ),userProvider.userDetailModel!.estateNames!.isEmpty?'': userProvider.userDetailModel!.estateNames?[0]??'',),
                         36.hb,
-                        _function('我的车位', R.ASSETS_ICONS_USER_ICON_WDCW_PNG, () => CarParkingPage(),'B区N392号'),
+                        _function('我的车位', R.ASSETS_ICONS_ICON_MY_CARSEAT_PNG, () => CarParkingPage(),''),
                         36.hb,
-                        _function('我的车', R.ASSETS_ICONS_USER_ICON_WDC_PNG, () => CarManagePage(),'浙999999'),
+                        _function('我的车', R.ASSETS_ICONS_ICON_MY_CAR_PNG, () => CarManagePage(),''),
                         36.hb,
-                        _myVisitor()
+                        _function('我的访客', R.ASSETS_ICONS_ICON_MY_VISITOR_PNG, () => CarManagePage(),''),
+                        36.hb,
+                        _function('收货地址设置', R.ASSETS_ICONS_ICON_MY_LOCATION_PNG, () => AddressListPage(canBack: false,),''),
+
                         //
                         // ApplicationView.custom(
                         //   items: userAppObjects,
@@ -641,142 +598,43 @@ class _PersonalIndexState extends State<PersonalIndex>
   }
   
   _function(  String title ,String path,dynamic page ,String msg,){
-    return Row(
-      children: [
-        Image.asset(path,width: 40.w,height: 40.w,fit:BoxFit.fitHeight,),
-        16.wb,
-        Text(
-          title,
-          style: TextStyle(
-            fontSize: 28.sp,
-            color: Colors.black.withOpacity(0.85),
-          ),
+    return GestureDetector(
+      onTap: (){
+        Get.to(page);
+      },
+      child: Container(
+        color: Colors.transparent,
+        child: Row(
+          children: [
+            Image.asset(path,width: 40.w,height: 40.w,fit:BoxFit.fitHeight,),
+            16.wb,
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 28.sp,
+                color: Colors.black.withOpacity(0.85),
+              ),
+            ),
+            Spacer(),
+            Text(
+              msg,
+              style: TextStyle(
+                fontSize: 24.sp,
+                color: Colors.black.withOpacity(0.45),
+              ),
+            ),
+            24.wb,
+            Icon(
+              CupertinoIcons.chevron_forward,
+              size: 24.w,
+              color: Color(0xFF999999),
+            ),
+          ],
         ),
-        Spacer(),
-        Text(
-          msg,
-          style: TextStyle(
-            fontSize: 24.sp,
-            color: Colors.black.withOpacity(0.45),
-          ),
-        ),
-        24.wb,
-        Icon(
-          CupertinoIcons.chevron_forward,
-          size: 24.w,
-          color: Color(0xFF999999),
-        ),
-      ],
+      ),
     );
   }
-  _myVisitor(){
-    final userProvider = Provider.of<UserProvider>(context);
-    return Row(
-      children: [
-        Text(
-          '我的访客',
-          style: TextStyle(
-            fontSize: 28.sp,
-            color: Colors.black.withOpacity(0.85),
-          ),
-        ),
-        Spacer(),
-        Container(
-          width: 110.w,
-          height: 40.w,
-          child: Stack(
-            children: [
-              Positioned(
 
-                child: Hero(
-                  tag: 'AVATAR4',
-                  child: ClipOval(
-                    child: FadeInImage.assetNetwork(
-                      placeholder: R.ASSETS_IMAGES_PLACEHOLDER_WEBP,
-                      image: API.image(userProvider
-                          .userInfoModel!.imgUrls.isNotEmpty
-                          ? userProvider
-                          .userInfoModel!.imgUrls.first.url
-                          : ''),
-                      height: 40.w,
-                      width: 40.w,
-                      fit: BoxFit.cover,
-                      imageErrorBuilder: (context, error, stackTrace) {
-                        return Image.asset(R.ASSETS_IMAGES_PLACEHOLDER_WEBP,height: 40.w,
-                          width: 40.w,);
-                      },
-                    ),
-                  ),
-                ),
-                top: 0,
-                bottom: 0,
-                right: 0,
-              ),
-              Positioned(
-
-                child: Hero(
-                  tag: 'AVATAR5',
-                  child: ClipOval(
-                    child: FadeInImage.assetNetwork(
-                      placeholder: R.ASSETS_IMAGES_PLACEHOLDER_WEBP,
-                      image: API.image(userProvider
-                          .userInfoModel!.imgUrls.isNotEmpty
-                          ? userProvider
-                          .userInfoModel!.imgUrls.first.url
-                          : ''),
-                      height: 40.w,
-                      width: 40.w,
-                      fit: BoxFit.cover,
-                      imageErrorBuilder: (context, error, stackTrace) {
-                        return Image.asset(R.ASSETS_IMAGES_PLACEHOLDER_WEBP,height: 106.w,
-                          width: 106.w,);
-                      },
-                    ),
-                  ),
-                ),
-                top: 0,
-                bottom: 0,
-                right: 15,
-              ),
-              Positioned(
-
-                child: Hero(
-                  tag: 'AVATAR6',
-                  child: ClipOval(
-                    child: FadeInImage.assetNetwork(
-                      placeholder: R.ASSETS_IMAGES_PLACEHOLDER_WEBP,
-                      image: API.image(userProvider
-                          .userInfoModel!.imgUrls.isNotEmpty
-                          ? userProvider
-                          .userInfoModel!.imgUrls.first.url
-                          : ''),
-                      height: 40.w,
-                      width: 40.w,
-                      fit: BoxFit.cover,
-                      imageErrorBuilder: (context, error, stackTrace) {
-                        return Image.asset(R.ASSETS_IMAGES_PLACEHOLDER_WEBP,height: 106.w,
-                          width: 106.w,);
-                      },
-                    ),
-                  ),
-                ),
-                top: 0,
-                bottom: 0,
-                right: 30,
-              ),
-            ],
-          )
-        ),
-
-        24.wb,
-        Icon(
-          CupertinoIcons.chevron_forward,
-          size: 24.w,
-          color: Color(0xFF999999),
-        ),
-      ],
-    );
-  }
     @override
     bool get wantKeepAlive => true;
 }

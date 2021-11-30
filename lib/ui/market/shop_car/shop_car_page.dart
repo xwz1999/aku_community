@@ -2,8 +2,11 @@ import 'package:aku_community/base/base_style.dart';
 import 'package:aku_community/const/resource.dart';
 import 'package:aku_community/constants/api.dart';
 import 'package:aku_community/models/market/shop_car/shop_car_list_model.dart';
+import 'package:aku_community/ui/market/search/submit_order_page.dart';
 import 'package:aku_community/ui/market/shop_car/shop_car_func.dart';
+import 'package:aku_community/utils/network/base_model.dart';
 import 'package:aku_community/utils/network/net_util.dart';
+import 'package:aku_community/widget/bee_scaffold.dart';
 import 'package:aku_community/widget/buttons/bee_check_radio.dart';
 import 'package:aku_community/widget/buttons/end_button.dart';
 import 'package:bot_toast/bot_toast.dart';
@@ -14,6 +17,7 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
+import 'package:aku_community/utils/headers.dart';
 
 class ShopCarPage extends StatefulWidget {
   const ShopCarPage({Key? key}) : super(key: key);
@@ -26,6 +30,9 @@ class _ShopCarPageState extends State<ShopCarPage> {
   bool _editStatus = false;
   List<TextEditingController> _controllers = [];
   List<ShopCarListModel> _models = [];
+  List<ShopCarListModel> _chooseModels = [];
+  EasyRefreshController _refreshController = EasyRefreshController();
+  bool _first = true;
 
   //选中的model下表
   List<int> _selectIndex = [];
@@ -35,8 +42,11 @@ class _ShopCarPageState extends State<ShopCarPage> {
 
   double get total {
     var num = 0.0;
+    if (_selectIndex.isEmpty) return 0.0;
     _selectIndex.forEach((element) {
-      num += _models[element].sellPrice;
+      double sellPrice = _models[element].sellPrice ?? 0;
+      int number = _models[element].num ?? 0;
+      num += (sellPrice * number);
     });
     return num;
   }
@@ -46,52 +56,28 @@ class _ShopCarPageState extends State<ShopCarPage> {
     _controllers.forEach((element) {
       element.dispose();
     });
+    _refreshController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Color(0xFFF9F9F9),
-        titleSpacing: 0,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            GestureDetector(
-              onTap: () {
-                Get.back();
-              },
-              child: Material(
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Icon(
-                    CupertinoIcons.back,
-                    size: 48.w,
-                  ),
-                ),
-              ),
-            ),
-            '购物车'.text.size(32.sp).black.bold.make(),
-          ],
-        ),
-        actions: [
-          TextButton(
-              onPressed: () {
-                _editStatus = !_editStatus;
-              },
-              child: (_editStatus ? '完成' : '管理')
-                  .text
-                  .size(32.sp)
-                  .black
-                  .bold
-                  .make())
-        ],
-      ),
+    return BeeScaffold(
+      title: '购物车'.text.size(32.sp).black.bold.make(),
+      titleSpacing: 0,
+      actions: [
+        TextButton(
+            onPressed: () {
+              _editStatus = !_editStatus;
+              setState(() {});
+            },
+            child:
+                (_editStatus ? '完成' : '管理').text.size(32.sp).black.bold.make())
+      ],
       body: SafeArea(
         child: Column(
           children: [
+            10.hb,
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -99,10 +85,11 @@ class _ShopCarPageState extends State<ShopCarPage> {
                 '共${_models.length}件商品'.text.size(28.sp).black.make(),
               ],
             ),
-            16.heightBox,
+            10.hb,
             Expanded(
               child: EasyRefresh(
                 firstRefresh: true,
+                controller: _refreshController,
                 header: MaterialHeader(),
                 onRefresh: () async {
                   var base = await NetUtil().get(API.market.shopCarList);
@@ -110,15 +97,28 @@ class _ShopCarPageState extends State<ShopCarPage> {
                     _models = (base.data as List)
                         .map((e) => ShopCarListModel.fromJson(e))
                         .toList();
-                    _controllers.forEach((element) {
-                      element.dispose();
-                    });
-                    _controllers.clear();
-                    _models.forEach((element) {
-                      _controllers.add(
-                          TextEditingController(text: element.num.toString()));
-                    });
+                    // _controllers.forEach((element) {
+                    //   element.dispose();
+                    // });
+                    // _controllers.clear();
+                    if (_first) {
+                      _models.forEach((element) {
+                        _controllers.add(TextEditingController(
+                            text: element.num.toString()));
+                      });
+                      _first = false;
+                    } else {
+                      if (_models.length > _controllers.length) {
+                        for (int i = _controllers.length - 1;
+                            i < _models.length;
+                            i++) {
+                          _controllers.add(TextEditingController(
+                              text: _models[i].num.toString()));
+                        }
+                      }
+                    }
                   }
+                  print(_models.length);
                   if (mounted) {
                     setState(() {});
                   }
@@ -135,42 +135,57 @@ class _ShopCarPageState extends State<ShopCarPage> {
           ],
         ),
       ),
-      bottomNavigationBar: Container(
+      bottomNavi: Container(
         width: double.infinity,
         height: 100.w,
         color: Colors.white,
         child: Row(
           children: [
-            10.widthBox,
+            20.widthBox,
             GestureDetector(
               onTap: () {
                 if (_allSelect) {
                   _selectIndex.clear();
+                  _chooseModels.clear();
                 } else {
                   _selectIndex.clear();
+                  _chooseModels.clear();
+                  _chooseModels.addAll(_models);
                   _selectIndex
                       .addAll(List.generate(_models.length, (index) => index));
                 }
                 setState(() {});
               },
               child: Container(
-                width: 44.w,
-                height: 44.w,
+                width: 120.w,
+                height: 60.w,
+                color: Colors.transparent,
                 alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(22.w),
-                    border: Border.all(color: Color(0xFFBBBBBB))),
-                child: AnimatedOpacity(
-                  duration: Duration(milliseconds: 500),
-                  opacity: _allSelect ? 1 : 0,
-                  child: Container(
-                    width: 24.w,
-                    height: 24.w,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12.w),
-                      color: Color(0xFFE52E2E),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 44.w,
+                      height: 44.w,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(22.w),
+                          border: Border.all(color: Color(0xFFBBBBBB))),
+                      child: AnimatedOpacity(
+                        duration: Duration(milliseconds: 500),
+                        opacity: _allSelect ? 1 : 0,
+                        child: Container(
+                          width: 24.w,
+                          height: 24.w,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12.w),
+                            color: Color(0xFFE52E2E),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                    5.widthBox,
+                    '全选'.text.size(28.sp).color(ktextPrimary).make(),
+                  ],
                 ),
               ),
             ),
@@ -206,23 +221,57 @@ class _ShopCarPageState extends State<ShopCarPage> {
     );
   }
 
-  Future _settleEnd() async {}
+  Future _settleEnd() async {
+    if (_chooseModels.isEmpty) {
+      BotToast.showText(text: '请先选择商品');
+    } else
+      Get.to(() => SubmitOrderPage(
+            models: _chooseModels,
+          ));
+  }
 
   Future _delete() async {
-    await NetUtil().post(
-      API.market.shopCarDelete,
-      params: {
-        'jcookGoodsIds': _selectIndex.map((e) => _models[e].id).toList()
-      },
-      showMessage: true,
-    );
+    if (_selectIndex.isNotEmpty) {
+      bool? result = await Get.dialog(CupertinoAlertDialog(
+        title: '您确定要删除该商品吗？'.text.isIntrinsic.size(30.sp).make(),
+        actions: [
+          CupertinoDialogAction(
+            child: '取消'.text.black.isIntrinsic.make(),
+            onPressed: () => Get.back(),
+          ),
+          CupertinoDialogAction(
+            child: '确定'.text.color(Colors.orange).isIntrinsic.make(),
+            onPressed: () => Get.back(result: true),
+          ),
+        ],
+      ));
+
+      if (result == true) {
+        BaseModel model = await NetUtil().post(
+          API.market.shopCarDelete,
+          params: {
+            'jcookGoodsIds': _selectIndex.map((e) => _models[e].id).toList()
+          },
+          showMessage: true,
+        );
+        if (model.status != null) {
+          if (model.status!) {
+            _selectIndex.clear();
+            _refreshController.callRefresh();
+          }
+        }
+      }
+      ;
+    } else {
+      BotToast.showText(text: '请先选择商品');
+    }
   }
 
   Widget _goodCard(ShopCarListModel model, int index) {
     var top = RichText(
       text: TextSpan(children: [
         WidgetSpan(
-          child: _getKindWd(model.kind),
+          child: _getKindWd(model.kind ?? 0),
         ),
         TextSpan(
             text: model.skuName,
@@ -241,19 +290,20 @@ class _ShopCarPageState extends State<ShopCarPage> {
           .color(Color(0xFFBBBBBB))
           .make(),
     );
+    double sellPrice = model.sellPrice ?? 0;
     var bottom = Row(
       children: [
         '¥'
             .richText
             .withTextSpanChildren([
-              model.sellPrice
+              sellPrice
                   .toInt()
                   .toString()
                   .textSpan
                   .size(40.sp)
                   .color(Color(0xFFE52E2E))
                   .make(),
-              '.${_getPointBehind(model.sellPrice)}'
+              '.${_getPointBehind(sellPrice)}'
                   .textSpan
                   .size(28.sp)
                   .color(Color(0xFFE52E2E))
@@ -263,13 +313,13 @@ class _ShopCarPageState extends State<ShopCarPage> {
             .size(28.sp)
             .make(),
         Spacer(),
-        _getBottomSuffix(model.goodStatus, model.id, index)
+        _getBottomSuffix(model.goodStatus, model.id!, index)
       ],
     );
     return Container(
       alignment: Alignment.center,
       height: 260.w,
-      margin: EdgeInsets.symmetric(horizontal: 20.w),
+      margin: EdgeInsets.only(left: 20.w, right: 20.w, bottom: 20.w),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16.w),
@@ -279,42 +329,95 @@ class _ShopCarPageState extends State<ShopCarPage> {
         children: [
           GestureDetector(
             onTap: () {
-              if (_selectIndex.contains(model.id)) {
+              if (_selectIndex.contains(index)) {
                 _selectIndex.remove(index);
+                _chooseModels.remove(model);
               } else {
                 _selectIndex.add(index);
+                _chooseModels.add(model);
               }
               setState(() {});
             },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
+            child:
+            model.goodStatus==GoodStatus.unSell?
+            Container(
+              color: Colors.transparent,
               height: double.infinity,
-              alignment: Alignment.center,
-              child: BeeCheckRadio(
-                value: model.id,
-                groupValue: _selectIndex,
-                backColor: Colors.white,
-                indent: Container(
-                  width: 24.w,
-                  height: 24.w,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                height: double.infinity,
+                alignment: Alignment.center,
+                child:Container(
+                  height: 40.w,
+                  width: 40.w,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12.w),
-                    color: Color(0xFFE52E2E),
+                    color:Color(0xFFBBBBBB),
+
+                    borderRadius: BorderRadius.circular(20.w),
+                  ),
+                  alignment: Alignment.center,
+                  child: Container(
+                    color: Color(0xFFEEEEEE),
+                    width: 26.w,
+                    height: 8.w,
+                  )
+                ),
+
+              ),
+            ):
+            Container(
+              color: Colors.transparent,
+              height: double.infinity,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                height: double.infinity,
+                alignment: Alignment.center,
+                child: BeeCheckRadio(
+                  value: index,
+                  groupValue: _selectIndex,
+                  backColor: Colors.white,
+                  indent: Container(
+                    width: 24.w,
+                    height: 24.w,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12.w),
+                      color: Color(0xFFE52E2E),
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-          Container(
-            width: 220.w,
-            height: 220.w,
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16.w),
-                image: DecorationImage(
-                    fit: BoxFit.scaleDown,
-                    image: NetworkImage(API.image(model.mainPhoto)))),
-            child: _getGoodsStatusImg(model.goodStatus),
+          // Container(
+          //   width: 220.w,
+          //   height: 220.w,
+          //   clipBehavior: Clip.antiAlias,
+          //   decoration: BoxDecoration(
+          //       borderRadius: BorderRadius.circular(16.w),
+          //       image: DecorationImage(
+          //           fit: BoxFit.scaleDown,
+          //           image: NetworkImage(model.mainPhoto??''))),
+          //   child: _getGoodsStatusImg(model.goodStatus),
+          // ),
+          Stack(
+            children: [
+              Container(
+                width: 220.w,
+                height: 220.w,
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16.w),
+                ),
+                child: FadeInImage.assetNetwork(
+                  placeholder: R.ASSETS_IMAGES_PLACEHOLDER_WEBP,
+                  image: model.mainPhoto ?? '',
+                  height: 220.w,
+                  width: 220.w,
+                ),
+              ),
+              Positioned(
+                  child: _getGoodsStatusImg(model.goodStatus) ?? SizedBox())
+            ],
           ),
           16.widthBox,
           Column(
@@ -372,7 +475,7 @@ class _ShopCarPageState extends State<ShopCarPage> {
 
   Widget? _getGoodsStatusImg(GoodStatus status) {
     switch (status) {
-      case GoodStatus.onSell:
+      case GoodStatus.unSell:
         return Container(
           width: double.infinity,
           height: double.infinity,
@@ -386,7 +489,7 @@ class _ShopCarPageState extends State<ShopCarPage> {
                 color: Colors.white),
           ),
         );
-      case GoodStatus.unSell:
+      case GoodStatus.onSell:
         return null;
     }
   }
@@ -401,11 +504,17 @@ class _ShopCarPageState extends State<ShopCarPage> {
             children: [
               GestureDetector(
                 onTap: () async {
-                  int num = int.parse(_controllers[index].text);
-                  var result = await changeNum(id, num - 1);
-                  if (result) {
-                    _controllers[index].text = (num - 1).toString();
+                  if(_controllers[index].text.isEmpty){
+                    _controllers[index].text = '1';
                   }
+                  int num = int.parse(_controllers[index].text);
+                  if (num > 1) {
+                    var result = await changeNum(id, num - 1);
+                    if (result) {
+                      _controllers[index].text = (num - 1).toString();
+                    }
+                  }
+
                   setState(() {});
                 },
                 child: Padding(
@@ -423,11 +532,18 @@ class _ShopCarPageState extends State<ShopCarPage> {
                     color: Color(0xFFF2F2F2),
                     borderRadius: BorderRadius.circular(4.w)),
                 child: TextField(
+                  //readOnly: true,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   onChanged: (text) async {
-                    var result = await changeNum(id, int.parse(text));
-                    if (!result) {
-                      // _controllers[index].text=
+                    if(text.isNotEmpty){
+                      if(int.parse(text)>10){
+                        _controllers[index].text = '10';
+                      }
+                      var result = await changeNum(id, int.parse(_controllers[index].text));
+                      if (!result) {
+                        // _controllers[index].text=
+
+                      }
                     }
 
                     setState(() {});
@@ -443,13 +559,22 @@ class _ShopCarPageState extends State<ShopCarPage> {
               ),
               GestureDetector(
                 onTap: () async {
-                  var result = await changeNum(
-                      id, int.parse(_controllers[index].text) + 1);
-                  if (result) {
-                    _controllers[index].text =
-                        (int.parse(_controllers[index].text) + 1).toString();
+                  if(_controllers[index].text.isEmpty){
+                    _controllers[index].text = '0';
                   }
-                  setState(() {});
+                  int num = int.parse(_controllers[index].text);
+
+                  if (num < 10) {
+                    var result = await changeNum(
+                        id, int.parse(_controllers[index].text) + 1);
+                    if (result) {
+                      _controllers[index].text =
+                          (int.parse(_controllers[index].text) + 1).toString();
+                    }
+                    setState(() {});
+                  }else{
+                    BotToast.showText(text:  '一次最多购买10个商品');
+                  }
                 },
                 child: Padding(
                   padding: EdgeInsets.only(left: 12.w),
@@ -492,5 +617,43 @@ class _ShopCarPageState extends State<ShopCarPage> {
     }
     cancel();
     return base.status ?? false;
+  }
+
+
+  Future _changeNum() async {
+    if (_selectIndex.isNotEmpty) {
+      bool? result = await Get.dialog(CupertinoAlertDialog(
+        title: '您确定要删除该商品吗？'.text.isIntrinsic.size(30.sp).make(),
+        actions: [
+          CupertinoDialogAction(
+            child: '取消'.text.black.isIntrinsic.make(),
+            onPressed: () => Get.back(),
+          ),
+          CupertinoDialogAction(
+            child: '确定'.text.color(Colors.orange).isIntrinsic.make(),
+            onPressed: () => Get.back(result: true),
+          ),
+        ],
+      ));
+
+      if (result == true) {
+        BaseModel model = await NetUtil().post(
+          API.market.shopCarDelete,
+          params: {
+            'jcookGoodsIds': _selectIndex.map((e) => _models[e].id).toList()
+          },
+          showMessage: true,
+        );
+        if (model.status != null) {
+          if (model.status!) {
+            _selectIndex.clear();
+            _refreshController.callRefresh();
+          }
+        }
+      }
+      ;
+    } else {
+      BotToast.showText(text: '请先选择商品');
+    }
   }
 }

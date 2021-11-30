@@ -43,7 +43,7 @@ class _ApplicationViewState extends State<ApplicationView> {
             width: 75.w,
           ),
           8.hb,
-          object.title.text.size(24.sp).bold.make(),
+          object.title.text.size(24.sp).make(),
         ],
       ),
     );

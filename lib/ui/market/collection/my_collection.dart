@@ -54,8 +54,17 @@ class MyCollectionPageState extends State<MyCollectionPage> {
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
     return BeeScaffold(
+      leading: Navigator.canPop(context)
+          ? IconButton(
+        onPressed: () => Get.back(result: true),
+        icon: Icon(
+          CupertinoIcons.chevron_back,
+          color: Colors.black,
+        ),
+      )
+          : SizedBox(),
       titleSpacing: 0,
       bgColor: Color(0xFFF9F9F9),
       bodyColor: Color(0xFFF9F9F9),
@@ -74,7 +83,8 @@ class MyCollectionPageState extends State<MyCollectionPage> {
           child: _onload
               ?  Container()
               : ListView(
-            children: [..._models.map((e) => CollectionListCard( model: e,)).toList()],
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            children: [..._models.map((e) => CollectionListCard( model: e,refreshController: _refreshController,)).toList()],
           ),
         ),
 

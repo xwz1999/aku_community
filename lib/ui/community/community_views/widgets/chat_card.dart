@@ -440,6 +440,7 @@ class _ChatCardState extends State<ChatCard>  {
                         : SizedBox(),
                     Spacer(),
                     _buildMoreButton(),
+                    20.wb,
                   ],
                 ),
                 // _renderLikeAndComment(),

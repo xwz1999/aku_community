@@ -54,7 +54,7 @@ class MyOrderFunc {
       return (baseModel.data as List)
           .map((e) => GoodsItem.fromJson(e))
           .toList();
-    }
+    }else
     return [];
   }
 

@@ -1,4 +1,5 @@
 import 'package:aku_community/constants/api.dart';
+import 'package:aku_community/model/good/good_detail_model.dart';
 import 'package:aku_community/models/market/goods_item.dart';
 import 'package:aku_community/models/market/order/order_detail_model.dart';
 import 'package:aku_community/models/search/search_goods_model.dart';
@@ -42,6 +43,39 @@ class SearchFunc {
     if (model.tableList!.length == 0) return [];
     return model.tableList!.map((e) => SearchGoodsModel.fromJson(e)).toList();
   }
+
+  ///查询商品详情
+  static Future<GoodDetailModel> getGoodDetail(int shopId) async {
+    BaseModel model = await NetUtil().get(
+      API.market.findGoodsDetail,
+      params: {'shopId': shopId},
+    );
+    if (model.data == null) return GoodDetailModel.fail();
+    return GoodDetailModel.fromJson(model.data);
+  }
+
+  ///查询商品详情图
+  static Future<List> getGoodDetailImage(int shopId) async {
+    BaseModel model = await NetUtil().get(
+      API.market.findGoodsDetailBigInfo,
+      params: {'shopId': shopId},
+    );
+    if (model.data == null) return [];
+    return model.data!.map((e) => e as String).toList();
+  }
+
+  ///加入购物车
+  static Future<String> addGoodsCar(int jcookGoodsId) async {
+    BaseModel model = await NetUtil().post(
+      API.market.insertShoppingCart,
+      params: {'jcookGoodsId': jcookGoodsId},
+      showMessage: true
+    );
+    if (model.message == null) return '';
+    return model.message as String;
+  }
+
+
 
 
 

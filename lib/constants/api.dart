@@ -26,6 +26,7 @@ class API {
   static _House house = _House();
 }
 
+
 class _Login {
   /// 获取手机验证码
   String get sendSMSCode => '/login/sendMMSLogin';
@@ -97,6 +98,28 @@ class _User {
 
   ///我的车辆：查询所有的车辆
   String get carList => '/user/myCar/list';
+
+  ///我的收货地址
+  String get myAddressList => '/user/jcookAddress/myAddress';
+
+  ///修改收货地址
+  String get updateAddress => '/user/jcookAddress/update';
+
+  ///删除收货地址
+  String get deleteAddress => '/user/jcookAddress/delete';
+
+  ///根据父类主键id查询城市信息
+  String get findByParentId => '/user/jcookAddress/findByParentId';
+
+  ///添加收货地址
+  String get insertAddress => '/user/jcookAddress/insert';
+
+  ///设置默认收货地址
+  String get settingDefaultAddress => '/user/jcookAddress/settingDefaultAddress';
+
+  ///查询所有城市的信息 需要10秒  首次打开APP时加载调用，保存到本地
+  String get findAllCityInfo => '/user/jcookAddress/findAllCityInfo';
+
 }
 
 class _News {
@@ -320,6 +343,11 @@ class _Manager {
 
   ///查询所有的周边企业信息
   String get surroundingEnterprises => '/user/surroundingEnterprises/list';
+
+  ///生活缴费：查询未缴金额（日常缴费+公摊费）
+  String get findUnpaidAmount =>
+      '/user/dailyPayment/findUnpaidAmount';
+
 }
 
 class _Community {
@@ -371,6 +399,27 @@ class _Community {
 
   ///资讯轮播图
   String get getSwiper => '/user/news/findNewsRotation';
+
+  ///查询热门资讯
+  String get findHotNews => '/user/news/findHotNews';
+
+  ///资讯增加浏览量
+  String get addViews => '/user/news/addViews';
+
+  ///查询最新的所有主题信息
+  String get getGambitList => '/user/gambit/list';
+
+  ///查询最新的所有主题信息  详情
+  String get gambitThemeDetail => '/user/gambit/GambitThemeDetail';
+
+  ///查询所有的话题(按热度排序)
+  String get listGambit => '/user/gambit/listGambit';
+
+  ///查询当前话题下，所有的主题信息
+  String get listByGambitId => '/user/gambit/listByGambitId';
+
+
+
 }
 
 class _Market {
@@ -474,8 +523,10 @@ class _Market {
   ///jcook商城（购物车）：我的购物车
   String get shopCarList => '/user/jcookShoppingCat/myShoppingCart';
 
-  ///jcook商城（购物车）：加入购物车
-  String get shopCarAdd => '/user/jcookShoppingCat/insertShoppingCart';
+  ///jcook商城 查询所有的可显示的分类信息 需要4秒 进入商场页面的时候加载
+  String get findAllCategoryInfo => '/user/jcookGoods/findAllCategoryInfo';
+
+
 
   ///jcook商城（购物车）：更改购物车商品数量
   String get shopCarChangeNum => '/user/jcookShoppingCat/updateShoppingCartNum';
@@ -485,6 +536,22 @@ class _Market {
 
   ///jcook商城（购物车）：购物车结算
   String get shopCarSettlement => '/user/jcookShoppingCat/settlement';
+
+  ///jcook商城 订单 取消订单
+  String get cancelOrder => '/user/jcookOrder/cancel';
+
+  ///jcook商城 订单 删除订单
+  String get deleteOrder => '/user/jcookOrder/appDelete';
+
+  ///jcook商城 订单 查看物流
+  String get findLogistics => '/user/jcookOrder/findLogistics';
+
+
+  ///jcook商城 订单 确认收货
+  String get confirmOrder => '/user/jcookOrder/confirm';
+
+
+
 }
 
 class _Upload {
@@ -632,6 +699,16 @@ class _Pay {
   ///抄表记录管理-抄表分摊详情费用支付 向支付宝发起订单查询请求
   String get sharePayOrderCodeCheck =>
       '/user/alipay/meterReadingShareDetailsOrderCheckAlipay';
+
+  ///app jcook商品创建订单(生成APP支付订单消息)
+  String get jcookOrderCreateOrder =>
+      '/user/alipay/jcookOrderCreateOrder';
+
+  ///支付宝支付：jcook商品 向支付宝发起订单查询请求
+  String get jcookOrderCheckAlipay =>
+      '/user/alipay/jcookOrderCheckAlipay';
+
+
 }
 
 class _House {

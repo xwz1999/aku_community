@@ -195,7 +195,7 @@ class _SharePayPageState extends State<SharePayPage> {
           "ids": total.ids,
           "payType": 1, //暂时写死 等待后续补充
           "payPrice": total.payTotal.toDoubleStringAsFixed()
-        });
+      });
         if (baseModel.status ?? false) {
           bool result = await PayUtil()
               .callAliPay(baseModel.message!, API.pay.sharePayOrderCodeCheck);

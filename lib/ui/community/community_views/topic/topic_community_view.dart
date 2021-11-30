@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:aku_community/widget/bee_scaffold.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -19,12 +20,8 @@ class TopicCommunityView extends StatefulWidget {
   TopicCommunityViewState createState() => TopicCommunityViewState();
 }
 
-class TopicCommunityViewState extends State<TopicCommunityView>
-    with AutomaticKeepAliveClientMixin {
+class TopicCommunityViewState extends State<TopicCommunityView>{
   EasyRefreshController _refreshController = EasyRefreshController();
-  refresh() {
-    _refreshController.callRefresh();
-  }
 
   _buildItem(CommunityTopicModel model) {
     return MaterialButton(
@@ -120,25 +117,30 @@ class TopicCommunityViewState extends State<TopicCommunityView>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-    return BeeListView<CommunityTopicModel>(
-      path: API.community.topicList,
-      controller: _refreshController,
-      convert: (model) {
-        return model.tableList!
-            .map((e) => CommunityTopicModel.fromJson(e))
-            .toList();
-      },
-      builder: (items) {
-        return ListView.separated(
-          itemBuilder: (context, index) {
-            return _buildItem(items[index]);
-          },
-          separatorBuilder: (_, __) => 20.hb,
-          itemCount: items.length,
-        );
-      },
+
+    return  BeeScaffold(
+      title: '所有话题',
+      body:BeeListView<CommunityTopicModel>(
+        path: API.community.topicList,
+        controller: _refreshController,
+        convert: (model) {
+          return model.tableList!
+              .map((e) => CommunityTopicModel.fromJson(e))
+              .toList();
+        },
+        builder: (items) {
+          return ListView.separated(
+            itemBuilder: (context, index) {
+              return _buildItem(items[index]);
+            },
+            separatorBuilder: (_, __) => 20.hb,
+            itemCount: items.length,
+          );
+        },
+      ),
     );
+
+
   }
 
   @override

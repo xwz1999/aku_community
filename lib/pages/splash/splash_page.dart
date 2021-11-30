@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:aku_community/const/resource.dart';
+import 'package:aku_community/constants/api.dart';
 import 'package:aku_community/main_initialize.dart';
+import 'package:aku_community/model/user/province_model.dart';
 import 'package:aku_community/pages/setting_page/agreement_page/agreement_page.dart';
 import 'package:aku_community/pages/setting_page/agreement_page/privacy_page.dart';
 import 'package:aku_community/pages/tab_navigator.dart';
@@ -10,6 +12,8 @@ import 'package:aku_community/provider/user_provider.dart';
 import 'package:aku_community/utils/developer_util.dart';
 import 'package:aku_community/utils/headers.dart';
 import 'package:aku_community/utils/hive_store.dart';
+import 'package:aku_community/utils/network/base_model.dart';
+import 'package:aku_community/utils/network/net_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -107,12 +111,17 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
+
+
     PowerLogger.start(
       context,
       debug: DeveloperUtil.dev,
     );
+
+
     Future.delayed(Duration(milliseconds: 0), () async {
       await _originOp();
+
       var agreement = await HiveStore.appBox?.get('agreement') ?? false;
       if (!agreement) {
         var result = await _showLoginVerify();
@@ -133,7 +142,8 @@ class _SplashPageState extends State<SplashPage> {
       MainInitialize.initWechat();
       MainInitialize.initWebSocket();
       Get.offAll(() => TabNavigator());
-    });
+    }
+    );
   }
 
   @override

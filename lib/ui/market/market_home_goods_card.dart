@@ -1,4 +1,5 @@
 import 'package:aku_community/models/market/order/goods_home_model.dart';
+import 'package:aku_community/ui/market/search/good_detail_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -28,10 +29,9 @@ class MarketHomeGoodsCard extends StatelessWidget {
           side: BorderSide(color: Color(0xFFC4C4C4))),
       padding: EdgeInsets.zero,
       onPressed: () {
-        // Get.to(
-        //       () => GoodsDetailPage(id: item.id),
-        //   preventDuplicates: false,
-        // )
+        Get.to(
+              () => GoodDetailPage(goodId: item.id!),
+        );
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,7 +115,7 @@ class MarketHomeGoodsCard extends StatelessWidget {
                     ),
                   ),
                   TextSpan(
-                    text: '${item.discountPrice??''} ',
+                    text: '${item.sellPrice??''} ',
                     style: TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,
@@ -135,7 +135,7 @@ class MarketHomeGoodsCard extends StatelessWidget {
               text: TextSpan(
                 children: [
                   TextSpan(
-                    text: '原价：¥',
+                    text: '原价：',
                     style: TextStyle(
                       color: ktextSubColor,
                       fontSize: 20.sp,
@@ -143,7 +143,7 @@ class MarketHomeGoodsCard extends StatelessWidget {
                     ),
                   ),
                   TextSpan(
-                    text: '${item.sellPrice??''}',
+                    text: item.discountPrice==null?'':'¥${item.discountPrice??''}',
                     style: TextStyle(
                       color: ktextSubColor,
                       fontSize: 20.sp,
@@ -170,7 +170,10 @@ class MarketHomeGoodsCard extends StatelessWidget {
                     ),
                   ),
                   TextSpan(
-                    text: '9折',
+                    text: (item.discountPrice??0)>(item.sellPrice??0)
+                        ? _getDiscount(item.sellPrice ?? -1,
+                        item.discountPrice ?? -1)
+                        : '暂无折扣',
                     style: TextStyle(
                       color: ktextSubColor,
                       fontSize: 20.sp,
@@ -185,6 +188,13 @@ class MarketHomeGoodsCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  _getDiscount(double sellPrice, double discountPrice) {
+    String count = '';
+    count = ((sellPrice / discountPrice) * 10).toStringAsFixed(1);
+
+    return count + '折';
   }
 
 

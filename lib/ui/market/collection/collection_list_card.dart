@@ -1,9 +1,11 @@
 import 'package:aku_community/base/base_style.dart';
 import 'package:aku_community/models/collection/collection_goods_model.dart';
 import 'package:aku_community/models/search/search_goods_model.dart';
+import 'package:aku_community/ui/market/collection/collection_func.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bot_toast/bot_toast.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:get/get.dart';
 
 import 'package:aku_community/constants/api.dart';
@@ -12,13 +14,15 @@ import 'package:aku_community/utils/headers.dart';
 
 class CollectionListCard extends StatelessWidget {
   final CollectionGoodsModel model;
-  const CollectionListCard({Key? key, required this.model}) : super(key: key);
+  final EasyRefreshController refreshController;
+  const CollectionListCard({Key? key, required this.model, required this.refreshController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
         height: 280.w,
+        margin: EdgeInsets.only(top: 20.w),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(
               Radius.circular(16.w),
@@ -108,7 +112,7 @@ class CollectionListCard extends StatelessWidget {
                                 ),
                               ),
                               TextSpan(
-                                text: '${model.sellPrice ?? 0}',
+                                text: '${model.discountPrice ?? 0}',
                                 style: TextStyle(
                                   color: ktextSubColor,
                                   fontSize: 20.sp,
@@ -129,10 +133,7 @@ class CollectionListCard extends StatelessWidget {
                                 ),
                               ),
                               TextSpan(
-                                text: ((model.discountPrice ??
-                                                1 / (model.sellPrice ?? 1)) *
-                                            10) <
-                                        1
+                                text: (model.discountPrice??0)>(model.sellPrice??0)
                                     ? _getDiscount(model.sellPrice ?? -1,
                                         model.discountPrice ?? -1)
                                     : '暂无折扣',
@@ -149,18 +150,26 @@ class CollectionListCard extends StatelessWidget {
                     Spacer(),
                     Row(
                       children: [
+                        // GestureDetector(
+                        //   child: Image.asset(R.ASSETS_ICONS_COLLECTION_SHARE_PNG,width: 44.w,height: 44.w,),
+                        //   onTap: (){
+                        //
+                        //   },
+                        // ),
+                        // 24.wb,
                         GestureDetector(
-                          child: Image.asset(R.ASSETS_ICONS_COLLECTION_SHARE_PNG,width: 44.w,height: 44.w,),
-                          onTap: (){
+                          onTap: () async {
+                            await CollectionFunc.collection(model.id!);
+
+
+                              refreshController.callRefresh();
 
                           },
-                        ),
-                        24.wb,
-                        GestureDetector(
-                          child: Image.asset(R.ASSETS_ICONS_COLLECTION_SETTING_PNG,width: 44.w,height: 44.w,),
-                          onTap: (){
-
-                          },
+                          child:Image.asset(
+                            R.ASSETS_ICONS_DELETE_PNG,
+                            width: 44.w,
+                            height: 44.w,
+                          )
                         ),
                       ],
                     ),
@@ -178,7 +187,7 @@ class CollectionListCard extends StatelessWidget {
 
   _getDiscount(double sellPrice, double discountPrice) {
     String count = '';
-    count = ((discountPrice / sellPrice) * 10).toStringAsFixed(1);
+    count = ((sellPrice / discountPrice) * 10).toStringAsFixed(1);
 
     return count + '折';
   }

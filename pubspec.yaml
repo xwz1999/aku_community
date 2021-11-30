@@ -2,7 +2,7 @@ name: aku_community
 description: A new Flutter project.
 publish_to: "none"
 
-version: 1.8.5-dev+49
+version: 1.8.5-dev+48
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -119,6 +119,7 @@ dev_dependencies:
     sdk: flutter
   #导入包整理
   import_sorter: ^4.5.1
+  hive_generator: ^1.1.0
   #脚本工具
   grinder: ^0.9.0
   flutter_native_splash: ^1.1.8+4
@@ -139,6 +140,7 @@ flutter:
     - assets/tab/
     - assets/applications/
     - assets/static/
+    - assets/json/
 
 import_sorter:
   emojis: true

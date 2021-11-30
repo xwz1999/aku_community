@@ -1,8 +1,14 @@
 import 'package:aku_community/const/resource.dart';
+import 'package:aku_community/constants/api.dart';
+import 'package:aku_community/model/user/province_model.dart';
 import 'package:aku_community/pages/property/property_page.dart';
 import 'package:aku_community/pages/sign/sign_in_page.dart';
+import 'package:aku_community/provider/app_provider.dart';
 import 'package:aku_community/ui/community/community_views/community_page.dart';
 import 'package:aku_community/ui/market/market_page.dart';
+import 'package:aku_community/utils/hive_store.dart';
+import 'package:aku_community/utils/network/base_model.dart';
+import 'package:aku_community/utils/network/net_util.dart';
 import 'package:aku_community/utils/websocket/web_socket_util.dart';
 import 'package:aku_community/widget/bee_scaffold.dart';
 import 'package:aku_community/widget/others/user_tool.dart';
@@ -12,14 +18,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
+import 'package:provider/provider.dart';
 
 import 'home/home_page.dart';
 import 'personal/personal_page.dart';
 import 'property/property_index.dart';
 
 class TabNavigator extends StatefulWidget {
+  final int? index;
   const TabNavigator({
-    Key? key,
+    Key? key, this.index,
   }) : super(key: key);
 
   @override
@@ -38,6 +46,24 @@ class _TabNavigatorState extends State<TabNavigator>
   @override
   void initState() {
     super.initState();
+    final appProvider = Provider.of<AppProvider>(Get.context!);
+    Future.delayed(Duration(milliseconds: 0), () async {
+      await appProvider.getMyAddress();//设置默认地址
+      List<ProvinceModel> _province = [];
+      var agreement = await HiveStore.appBox?.get('cityList') ?? null;
+      if (agreement==null) {
+        ///获取城市列表
+        BaseModel baseModel = await NetUtil().get(
+          API.user.findAllCityInfo,
+        );
+        if (baseModel.data!=null) {
+          _province = (baseModel.data as List)
+              .map((e) => ProvinceModel.fromJson(e))
+              .toList();
+          HiveStore.appBox!.put('cityList', _province);
+        }
+      }
+    });
     _pages = [
       HomePage(),
       MarketPage(),
@@ -46,7 +72,8 @@ class _TabNavigatorState extends State<TabNavigator>
       PersonalIndex()
     ];
 
-    _tabController = TabController(length: _pages.length, vsync: this);
+    _tabController = TabController(length: _pages.length, vsync: this,initialIndex: widget.index??0);
+
   }
 
   _buildBottomBar(

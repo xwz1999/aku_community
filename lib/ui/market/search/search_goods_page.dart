@@ -1,8 +1,10 @@
 import 'dart:math';
 
 import 'package:aku_community/model/common/img_model.dart';
+import 'package:aku_community/models/market/goods_popular_model.dart';
 import 'package:aku_community/models/search/search_goods_model.dart';
 import 'package:aku_community/provider/user_provider.dart';
+import 'package:aku_community/ui/community/community_func.dart';
 
 import 'package:aku_community/ui/market/collection/my_collection.dart';
 
@@ -26,6 +28,7 @@ import 'package:aku_community/ui/market/goods/goods_card.dart';
 import 'package:aku_community/utils/headers.dart';
 import 'package:aku_community/widget/bee_scaffold.dart';
 
+import 'good_detail_page.dart';
 import 'goods_list_card.dart';
 
 enum OrderType {
@@ -36,7 +39,8 @@ enum OrderType {
 }
 
 class SearchGoodsPage extends StatefulWidget {
-  SearchGoodsPage({Key? key}) : super(key: key);
+  final String? search;
+  SearchGoodsPage({Key? key, this.search}) : super(key: key);
 
   @override
   SearchGoodsPageState createState() => SearchGoodsPageState();
@@ -45,7 +49,8 @@ class SearchGoodsPage extends StatefulWidget {
 class SearchGoodsPageState extends State<SearchGoodsPage> {
   TextEditingController _editingController = TextEditingController();
   OrderType _orderType = OrderType.NORMAL;
-  IconData priceIcon = CupertinoIcons.chevron_up_chevron_down;
+  // IconData priceIcon = CupertinoIcons.chevron_up_chevron_down;
+  String priceIcon = R.ASSETS_ICONS_ICON_PRICE_NORMAL_PNG;
   EasyRefreshController _refreshController = EasyRefreshController();
   EasyRefreshController _refreshController1 = EasyRefreshController();
   List<String> _searchHistory = [];
@@ -58,12 +63,18 @@ class SearchGoodsPageState extends State<SearchGoodsPage> {
    int? brandId;
    double? minPrice;
    double? maxPrice;
-    late List<SearchGoodsModel> _models;
+   List<SearchGoodsModel> _models = [];
   ScrollController  _scrollController= new ScrollController();
+  List<GoodsPopularModel> goodsPopularModels = [];
 
   @override
   void initState() {
     super.initState();
+    if(widget.search!=null){
+       _startSearch = true;
+      _searchText = widget.search??'';
+      _editingController.text = widget.search??'';
+    }
 
     getSearchListFromSharedPreferences();
   }
@@ -82,7 +93,7 @@ class SearchGoodsPageState extends State<SearchGoodsPage> {
     final normalTypeButton = MaterialButton(
       onPressed: () {
         _orderType = OrderType.NORMAL;
-        priceIcon = CupertinoIcons.chevron_up_chevron_down;
+        priceIcon = R.ASSETS_ICONS_ICON_PRICE_NORMAL_PNG;
         orderBySalesVolume = null;
         orderByPrice = null;
         _refreshController1.callRefresh();
@@ -107,7 +118,7 @@ class SearchGoodsPageState extends State<SearchGoodsPage> {
         _orderType = OrderType.SALES;
         orderBySalesVolume = 2;
         orderByPrice = null;
-        priceIcon = CupertinoIcons.chevron_up_chevron_down;
+        priceIcon =  R.ASSETS_ICONS_ICON_PRICE_NORMAL_PNG;
         _refreshController1.callRefresh();
         setState(() {});
       },
@@ -134,19 +145,19 @@ class SearchGoodsPageState extends State<SearchGoodsPage> {
             _orderType = OrderType.PRICE_HIGH;
             orderByPrice = 1;
             orderBySalesVolume = null;
-            priceIcon = CupertinoIcons.chevron_up;
+            priceIcon = R.ASSETS_ICONS_ICON_PRICE_TOP_PNG;
             break;
           case OrderType.PRICE_HIGH:
             _orderType = OrderType.PRICE_LOW;
             orderByPrice = 2;
             orderBySalesVolume = null;
-            priceIcon = CupertinoIcons.chevron_down;
+            priceIcon = R.ASSETS_ICONS_ICON_PRICE_BOTTOM_PNG;
             break;
           case OrderType.PRICE_LOW:
             _orderType = OrderType.PRICE_HIGH;
             orderByPrice = 1;
             orderBySalesVolume = null;
-            priceIcon = CupertinoIcons.chevron_up;
+            priceIcon = R.ASSETS_ICONS_ICON_PRICE_TOP_PNG;
             break;
         }
         _refreshController1.callRefresh();
@@ -171,14 +182,15 @@ class SearchGoodsPageState extends State<SearchGoodsPage> {
                   : FontWeight.normal,
             ),
           ),
-          Icon(
-            priceIcon,
-            size: 32.w,
-            color: _orderType == OrderType.PRICE_HIGH ||
-                _orderType == OrderType.PRICE_LOW
-                ? kBalckSubColor
-                : ktextPrimary,
-          ),
+          // Icon(
+          //   priceIcon,
+          //   size: 32.w,
+          //   color: _orderType == OrderType.PRICE_HIGH ||
+          //       _orderType == OrderType.PRICE_LOW
+          //       ? kBalckSubColor
+          //       : ktextPrimary,
+          // ),
+          Image.asset(priceIcon,width: 32.w,height: 32.w,)
         ],
       ),
       height: 80.w,
@@ -186,22 +198,7 @@ class SearchGoodsPageState extends State<SearchGoodsPage> {
     );
     return
       BeeScaffold(
-        // fab:  FloatingActionButton(
-        //   backgroundColor: Colors.transparent,
-        //   foregroundColor: Colors.transparent,
-        //   elevation: 0,
-        //   highlightElevation: 0,
-        //   shape: new ,
-        //   onPressed: ()  {
-        //   },
-        //   child: Column(
-        //     children: [
-        //       Image.asset(R.ASSETS_ICONS_COLLECT_PNG,width: 84.w,height: 84.w,),
-        //       24.hb,
-        //       Image.asset(R.ASSETS_ICONS_ICON_TOTOP_PNG,width: 84.w,height: 84.w,),
-        //     ],
-        //   ),
-        // ),
+
       titleSpacing: 0,
       bgColor: Color(0xFFF9F9F9),
       bodyColor: Color(0xFFF9F9F9),
@@ -325,36 +322,56 @@ class SearchGoodsPageState extends State<SearchGoodsPage> {
               _showList
                   ? Container(
                 color: Color(0xFFF2F3F4),
-                child: BeeListView(
-
-                  path: API.market.search,
+                child: EasyRefresh(
+                  firstRefresh: true,
+                  header: MaterialHeader(),
+                  footer: MaterialFooter(),
                   controller: _refreshController,
-                  extraParams: {'searchName': ''},
-                  convert: (model) => model.tableList!
-                      .map((e) => GoodsItem.fromJson(e))
-                      .toList(),
-                  builder: (items) {
-                    return ListView.separated(
-                      padding: EdgeInsets.only(top: 10.w,
-                          left: 20.w, right: 20.w, bottom: 32.w),
-
-                      // gridDelegate: SliverWaterfallFlowDelegateWithFixedCrossAxisCount(
-                      //   crossAxisCount: 2,
-                      //   mainAxisSpacing: 20.w,
-                      //   crossAxisSpacing: 20.w,
-                      // ),
+                  onRefresh: () async {
+                    goodsPopularModels = await CommunityFunc.getGoodsPopularModel(20);
+                    setState(() {});
+                  },
+                  child: goodsPopularModels.isEmpty
+                      ? Container()
+                      : ListView.separated(
+                      padding: EdgeInsets.symmetric(vertical: 16.w, horizontal: 32.w),
                       itemBuilder: (context, index) {
-                        final item = items[index];
-                        return _hotGoodsCard(
-                            item, index); //GoodsCard(item: item);
+                        return _hotGoodsCard(goodsPopularModels[index], index);
                       },
                       separatorBuilder: (_, __) {
-                        return 32.w.heightBox;
+                        return 16.w.heightBox;
                       },
-                      itemCount: items.length,
-                    );
-                  },
+                      itemCount: goodsPopularModels.length),
                 ),
+                // BeeListView(
+                //   path: API.market.search,
+                //   controller: _refreshController,
+                //   extraParams: {'searchName': ''},
+                //   convert: (model) => model.tableList!
+                //       .map((e) => GoodsItem.fromJson(e))
+                //       .toList(),
+                //   builder: (items) {
+                //     return ListView.separated(
+                //       padding: EdgeInsets.only(top: 10.w,
+                //           left: 20.w, right: 20.w, bottom: 32.w),
+                //
+                //       // gridDelegate: SliverWaterfallFlowDelegateWithFixedCrossAxisCount(
+                //       //   crossAxisCount: 2,
+                //       //   mainAxisSpacing: 20.w,
+                //       //   crossAxisSpacing: 20.w,
+                //       // ),
+                //       itemBuilder: (context, index) {
+                //         final item = items[index];
+                //         return _hotGoodsCard(
+                //             item, index); //GoodsCard(item: item);
+                //       },
+                //       separatorBuilder: (_, __) {
+                //         return 32.w.heightBox;
+                //       },
+                //       itemCount: items.length,
+                //     );
+                //   },
+                // ),
               ).expand()
                   : SizedBox(),
             ],
@@ -413,9 +430,12 @@ class SearchGoodsPageState extends State<SearchGoodsPage> {
               children: [
                 GestureDetector(
                   child: Image.asset(R.ASSETS_ICONS_COLLECT_PNG,width: 84.w,height: 84.w,),
-                  onTap: (){
-                    Get.to(() => MyCollectionPage());
-
+                  onTap: ()async{
+                    var result = await Get.to(() => MyCollectionPage());
+                    if(result!=null)
+                    if(result){
+                      _refreshController1.callRefresh();
+                    }
                   },
                 ),
                 24.hb,
@@ -458,106 +478,116 @@ class SearchGoodsPageState extends State<SearchGoodsPage> {
       setState(() {});
   }
 
-  _hotGoodsCard(GoodsItem goodsItem, int index) {
-    return Row(
-      children: [
-        Stack(
+  _hotGoodsCard(GoodsPopularModel goodsItem, int index) {
+    return GestureDetector(
+      onTap: (){
+        Get.to(
+              () => GoodDetailPage(goodId: goodsItem.id!),
+        );
+      },
+      child: Container(
+        color: Colors.transparent,
+        child: Row(
           children: [
-            Material(
-              color: Color(0xFFF5F5F5),
-              borderRadius: BorderRadius.circular(16.w),
-              clipBehavior: Clip.antiAlias,
-              child: FadeInImage.assetNetwork(
-                placeholder: R.ASSETS_IMAGES_PLACEHOLDER_WEBP,
-                image: API.image(ImgModel.first(goodsItem.imgList)),
-                fit: BoxFit.fill,
-                width: 124.w,
-                height: 124.w,
-                imageErrorBuilder: (context, error, stackTrace) {
-                  return Image.asset(
-                    R.ASSETS_IMAGES_PLACEHOLDER_WEBP,
+            Stack(
+              children: [
+                Material(
+                  color: Color(0xFFF5F5F5),
+                  borderRadius: BorderRadius.circular(16.w),
+                  clipBehavior: Clip.antiAlias,
+                  child: FadeInImage.assetNetwork(
+                    placeholder: R.ASSETS_IMAGES_PLACEHOLDER_WEBP,
+                    image: goodsItem.mainPhoto??'',
+                    fit: BoxFit.fill,
                     width: 124.w,
                     height: 124.w,
-                  );
-                },
-              ),
-            ),
-            Positioned(
-                left: 0,
-                top: 0,
-                child: Container(
-                  alignment: Alignment.center,
-                  width: 32.w,
-                  height: 32.w,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(16.w),
-                        topRight: Radius.circular(16.w),
-                        bottomLeft: Radius.circular(16.w)),
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomCenter,
-                      colors: index == 0
-                          ? <Color>[
-                              Color(0xFFE52E2E),
-                              Color(0xFFF58123),
-                            ]
-                          : index == 1
+                    imageErrorBuilder: (context, error, stackTrace) {
+                      return Image.asset(
+                        R.ASSETS_IMAGES_PLACEHOLDER_WEBP,
+                        width: 124.w,
+                        height: 124.w,
+                      );
+                    },
+                  ),
+                ),
+                Positioned(
+                    left: 0,
+                    top: 0,
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: 32.w,
+                      height: 32.w,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(16.w),
+                            topRight: Radius.circular(16.w),
+                            bottomLeft: Radius.circular(16.w)),
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomCenter,
+                          colors: index == 0
                               ? <Color>[
+                                  Color(0xFFE52E2E),
                                   Color(0xFFF58123),
-                                  Color(0xFFF5AF16),
                                 ]
-                              : index == 2
+                              : index == 1
                                   ? <Color>[
-                                      Color(0xFFF5AF16),
+                                      Color(0xFFF58123),
                                       Color(0xFFF5AF16),
                                     ]
-                                  : <Color>[
-                                      Color(0xFFBBBBBB),
-                                      Color(0xFFBBBBBB),
-                                    ],
-                    ),
-                  ),
-                  child: Text(
-                    '${index + 1}',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24.sp,
-                    ),
-                  ),
-                )),
-          ],
-        ),
-        32.wb,
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              width: 500.w,
-              child: Text(
-                goodsItem.title,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: ktextPrimary, fontSize: 28.sp),
-              ),
+                                  : index == 2
+                                      ? <Color>[
+                                          Color(0xFFF5AF16),
+                                          Color(0xFFF5AF16),
+                                        ]
+                                      : <Color>[
+                                          Color(0xFFBBBBBB),
+                                          Color(0xFFBBBBBB),
+                                        ],
+                        ),
+                      ),
+                      child: Text(
+                        '${index + 1}',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24.sp,
+                        ),
+                      ),
+                    )),
+              ],
             ),
-            8.hb,
-            Row(
+            32.wb,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  '人气值',
-                  style: TextStyle(color: ktextSubColor, fontSize: 24.sp),
+                SizedBox(
+                  width: 500.w,
+                  child: Text(
+                    goodsItem.skuName??'',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: ktextPrimary, fontSize: 28.sp),
+                  ),
                 ),
-                10.wb,
-                Text(
-                  '99251',
-                  style: TextStyle(color: Color(0xFFBBBBBB), fontSize: 24.sp),
-                ),
+                8.hb,
+                Row(
+                  children: [
+                    Text(
+                      '人气值',
+                      style: TextStyle(color: ktextSubColor, fontSize: 24.sp),
+                    ),
+                    10.wb,
+                    Text(
+                      goodsItem.viewsNum==null?'0':goodsItem.viewsNum.toString(),
+                      style: TextStyle(color: Color(0xFFBBBBBB), fontSize: 24.sp),
+                    ),
+                  ],
+                )
               ],
             )
           ],
-        )
-      ],
+        ),
+      ),
     );
   }
 

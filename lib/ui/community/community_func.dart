@@ -1,7 +1,10 @@
 import 'package:aku_community/constants/api.dart';
 import 'package:aku_community/model/community/activity_item_model.dart';
 import 'package:aku_community/model/community/board_model.dart';
+import 'package:aku_community/model/community/community_topic_model.dart';
+import 'package:aku_community/model/community/hot_news_model.dart';
 import 'package:aku_community/model/community/swiper_model.dart';
+import 'package:aku_community/model/good/category_model.dart';
 import 'package:aku_community/models/market/goods_classification.dart';
 import 'package:aku_community/models/market/goods_popular_model.dart';
 import 'package:aku_community/models/market/order/goods_home_model.dart';
@@ -10,6 +13,40 @@ import 'package:aku_community/utils/network/base_model.dart';
 import 'package:aku_community/utils/network/net_util.dart';
 
 class CommunityFunc {
+
+
+  ///查询热门话题
+  static Future<List<CommunityTopicModel>> getListGambit() async {
+    BaseListModel model = await NetUtil().getList(
+      API.community.listGambit,
+      params: {'pageNum': 1, 'size': 8},
+    );
+    if (model.tableList!.length == 0) return [];
+    return model.tableList!.map((e) => CommunityTopicModel.fromJson(e)).toList();
+  }
+
+  ///查询热门资讯
+  static Future<List<HotNewsModel>> getHotNews() async {
+    BaseListModel model = await NetUtil().getList(
+      API.community.findHotNews,
+      params: {'pageNum': 1, 'size': 4},
+    );
+    if (model.tableList!.length == 0) return [];
+    return model.tableList!.map((e) => HotNewsModel.fromJson(e)).toList();
+  }
+
+  ///给单个资讯增加浏览量
+  static Future<String> addViews(int newsId) async {
+    BaseModel model = await NetUtil().get(
+      API.community.addViews,
+      params: {'newsId': newsId,},
+    );
+    if (model.message == null)
+      return '';
+    return (model.message as String).toString();
+  }
+
+
 
   ///查询当天上架的商品数量
   static Future<String> getNewProductsTodayNum() async {
@@ -78,6 +115,21 @@ class CommunityFunc {
     return (model.data as List)
         .map((e) => GoodsPopularModel.fromJson(e))
         .toList();
+  }
+
+
+  ///获取所有商品的分类
+  static Future<List<CategoryModel>> getCategory() async {
+    BaseModel model = await NetUtil().get(
+      API.market.findAllCategoryInfo,
+    );
+    if (model.data!.length == 0) return [];
+    else{
+      return (model.data as List)
+          .map((e) => CategoryModel.fromJson(e))
+          .toList();
+    }
+
   }
 
 

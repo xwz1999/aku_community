@@ -11,6 +11,8 @@ import 'package:aku_community/constants/api.dart';
 
 import 'package:aku_community/utils/headers.dart';
 
+import 'good_detail_page.dart';
+
 class GoodsListCard extends StatefulWidget {
   final SearchGoodsModel model;
   final EasyRefreshController? refreshController;
@@ -27,6 +29,9 @@ class GoodsListCardState extends State<GoodsListCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: (){
+        Get.to(() => GoodDetailPage(goodId: widget.model.id!,));
+      },
       child: Container(
         height: 280.w,
         decoration: BoxDecoration(
@@ -118,7 +123,7 @@ class GoodsListCardState extends State<GoodsListCard> {
                                 ),
                               ),
                               TextSpan(
-                                text: '${widget.model.sellPrice ?? 0}',
+                                text: '${widget.model.discountPrice ?? 0}',
                                 style: TextStyle(
                                   color: ktextSubColor,
                                   fontSize: 20.sp,
@@ -139,10 +144,7 @@ class GoodsListCardState extends State<GoodsListCard> {
                                 ),
                               ),
                               TextSpan(
-                                text: ((widget.model.discountPrice ??
-                                                1 / (widget.model.sellPrice ?? 1)) *
-                                            10) <
-                                        1
+                                text: (widget.model.discountPrice??0)>(widget.model.sellPrice??0)
                                     ? _getDiscount(widget.model.sellPrice ?? -1,
                                     widget.model.discountPrice ?? -1)
                                     : '暂无折扣',
@@ -191,7 +193,7 @@ class GoodsListCardState extends State<GoodsListCard> {
 
   _getDiscount(double sellPrice, double discountPrice) {
     String count = '';
-    count = ((discountPrice / sellPrice) * 10).toStringAsFixed(1);
+    count = ((sellPrice / discountPrice) * 10).toStringAsFixed(1);
 
     return count + '折';
   }

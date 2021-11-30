@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -5,6 +6,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -49,6 +51,15 @@ class _PublicInformationDetailPageState
   @override
   Widget build(BuildContext context) {
     return BeeScaffold(
+      leading:Navigator.canPop(context)
+          ? IconButton(
+        onPressed: () => Get.back(result: true),
+        icon: Icon(
+          CupertinoIcons.chevron_back,
+          color: Colors.black,
+        ),
+      )
+          : SizedBox(),
       title: _onload ? '' : _detailModel.newsCategoryName,
       bodyColor: Colors.white,
       body: EasyRefresh(
