@@ -67,11 +67,6 @@ class UserProvider extends ChangeNotifier {
   Future updateProfile() async {
     _userInfoModel = await SignFunc.getUserInfo();
     if (_userInfoModel != null && !kIsWeb && !Platform.isMacOS) {
-      try {
-         await JPush().setAlias(_userInfoModel!.id.toString());
-      } catch (e) {
-        LoggerData.addData(e);
-      }
     }
     notifyListeners();
   }

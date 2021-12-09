@@ -5,6 +5,7 @@ import 'package:aku_community/constants/api.dart';
 import 'package:aku_community/model/common/img_model.dart';
 import 'package:aku_community/model/community/swiper_model.dart';
 import 'package:aku_community/model/good/category_model.dart';
+import 'package:aku_community/model/good/market_swiper_model.dart';
 import 'package:aku_community/models/market/goods_classification.dart';
 import 'package:aku_community/models/market/goods_popular_model.dart';
 import 'package:aku_community/models/market/order/goods_home_model.dart';
@@ -62,7 +63,8 @@ class _MarketPageState extends State<MarketPage>
   double tabBarHeight = 40.w;
   late TabController _tabController;
 
-  List<SwiperModel> _swiperModels = [];
+ // List<SwiperModel> _swiperModels = [];
+  List<MarketSwiperModel> _marketSwiperModels = [];
 
   List<CategoryModel> _categoryModels = [];
 
@@ -176,7 +178,8 @@ class _MarketPageState extends State<MarketPage>
 
   _refresh() async {
     await updateMarketInfo();
-    _swiperModels = await CommunityFunc.swiper();
+    //_swiperModels = await CommunityFunc.swiper();
+    _marketSwiperModels = await CommunityFunc.marketSwiper();
     _newTotal = await CommunityFunc.getNewProductsTodayNum();
     _total = await CommunityFunc.getSkuTotal();
     _brandTotal = await CommunityFunc.getSettledBrandsNum();
@@ -614,7 +617,7 @@ class _MarketPageState extends State<MarketPage>
         child: Swiper(
           key: UniqueKey(),
           itemBuilder: (BuildContext context, int index) {
-            return getSwiperImage(_swiperModels[index]);
+            return getSwiperImage(_marketSwiperModels[index]);
           },
 
           pagination: SwiperPagination(
@@ -623,7 +626,7 @@ class _MarketPageState extends State<MarketPage>
                   builder: (BuildContext context, SwiperPluginConfig config) {
                 return RectIndicator(
                   position: config.activeIndex,
-                  count: _swiperModels.length,
+                  count: _marketSwiperModels.length,
                   activeColor: Color(0x99FFFFFF),
                   color: Color(0xD9FFFFFF),
                   //未选中 指示器颜色，选中的颜色key为Color
@@ -640,16 +643,19 @@ class _MarketPageState extends State<MarketPage>
           // control: new SwiperControl(),
           autoplay: true,
           onTap: (index) {
-            Get.to(() =>
-                PublicInformationDetailPage(id: _swiperModels[index].newsId!));
+            if(_marketSwiperModels[index].jcookGoodsId!=null){
+              Get.to(
+                    () => GoodDetailPage(goodId: _marketSwiperModels[index].jcookGoodsId!),
+              );
+            }
           },
-          itemCount: _swiperModels.length,
+          itemCount: _marketSwiperModels.length,
         ),
       ),
     );
   }
 
-  Widget getSwiperImage(SwiperModel swiperModel) {
+  Widget getSwiperImage(MarketSwiperModel swiperModel) {
     return Container(
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
@@ -657,7 +663,7 @@ class _MarketPageState extends State<MarketPage>
       ),
       child: FadeInImage.assetNetwork(
         placeholder: R.ASSETS_IMAGES_PLACEHOLDER_WEBP,
-        image: API.image(ImgModel.first(swiperModel.voResourcesImgList)),
+        image:API.image(swiperModel.imgList!.isNotEmpty? swiperModel.imgList!.first.url :''),
         fit: BoxFit.fill,
         imageErrorBuilder: (context, error, stackTrace) {
           return Image.asset(
@@ -671,6 +677,7 @@ class _MarketPageState extends State<MarketPage>
 
   _buttonTitle() {
     Container titles = Container(
+      key:UniqueKey(),
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -685,7 +692,7 @@ class _MarketPageState extends State<MarketPage>
           if (index == 9) {
             return _buildAllTile();
           } else {
-            return _buildTile(_goodsClassificationList[index]);
+            return _buildTile(_goodsClassificationList[index],index);
           }
         },
         itemCount: 10,
@@ -701,8 +708,11 @@ class _MarketPageState extends State<MarketPage>
     );
   }
 
-  _buildTile(GoodsClassification item) {
+  _buildTile(GoodsClassification item,int index) {
     return GestureDetector(
+      onTap: (){
+        Get.to(() => NewCategoryPage(models: _categoryModels,index: index,));
+      },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -732,7 +742,7 @@ class _MarketPageState extends State<MarketPage>
   _buildAllTile() {
     return GestureDetector(
       onTap: () async{
-        Get.to(() => NewCategoryPage(models: _categoryModels));
+        Get.to(() => NewCategoryPage(models: _categoryModels,index: 0,));
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -840,6 +850,7 @@ class _MarketPageState extends State<MarketPage>
                       child: Container(
                         width: 96.w,
                         height: 96.w,
+                        key:UniqueKey(),
                         child: FadeInImage.assetNetwork(
                           placeholder: R.ASSETS_IMAGES_PLACEHOLDER_WEBP,
                           image: _goodsPopularModelList[index].mainPhoto ?? '',
@@ -903,6 +914,7 @@ class _MarketPageState extends State<MarketPage>
             normalTypeButton,
             salesTypeButton,
             priceButton,
+
           ],
         ),
       ),

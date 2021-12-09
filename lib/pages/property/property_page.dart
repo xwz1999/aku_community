@@ -103,40 +103,40 @@ class _PropertyPageState extends State<PropertyPage>
               textAlign: TextAlign.center,
             ),
           ]),
-      actions: [
-        GestureDetector(
-          onTap: () {
-            Get.to(() => BeeSearch());
-          },
-          child: Image.asset(R.ASSETS_ICONS_ICON_PROPERTY_SEARCH_PNG,
-              height: 40.w, width: 40.w),
-        ),
-        Padding(
-          padding: EdgeInsets.only(right: 10.w, left: 12.w),
-          child: Badge(
-              elevation: 0,
-              badgeColor: Color(0xFFCF2525),
-              padding: sum > 9 ? EdgeInsets.all(2.w) : EdgeInsets.all(5.w),
-              showBadge: appProvider.messageCenterModel.commentCount != 0 ||
-                  appProvider.messageCenterModel.sysCount != 0,
-              position: BadgePosition.topEnd(
-                top: 3,
-                end: -5,
-              ),
-              badgeContent: Text(
-                (sum).toString(),
-                style: TextStyle(color: Colors.white, fontSize: 10.sp),
-              ),
-              child: GestureDetector(
-                onTap: () {
-                  if (LoginUtil.isNotLogin) return;
-                  Get.to(() => MessageCenterPage());
-                },
-                child: Image.asset(R.ASSETS_ICONS_ICON_PROPERTY_MESSAGE_PNG,
-                    height: 40.w, width: 40.w),
-              )),
-        ),
-      ],
+      // actions: [
+      //   GestureDetector(
+      //     onTap: () {
+      //       Get.to(() => BeeSearch());
+      //     },
+      //     child: Image.asset(R.ASSETS_ICONS_ICON_PROPERTY_SEARCH_PNG,
+      //         height: 40.w, width: 40.w),
+      //   ),
+      //   // Padding(
+      //   //   padding: EdgeInsets.only(right: 10.w, left: 12.w),
+      //   //   child: Badge(
+      //   //       elevation: 0,
+      //   //       badgeColor: Color(0xFFCF2525),
+      //   //       padding: sum > 9 ? EdgeInsets.all(2.w) : EdgeInsets.all(5.w),
+      //   //       showBadge: appProvider.messageCenterModel.commentCount != 0 ||
+      //   //           appProvider.messageCenterModel.sysCount != 0,
+      //   //       position: BadgePosition.topEnd(
+      //   //         top: 8.w,
+      //   //         end: -4.w,
+      //   //       ),
+      //   //       badgeContent: Text(
+      //   //         (sum).toString(),
+      //   //         style: TextStyle(color: Colors.white, fontSize: 20.sp),
+      //   //       ),
+      //   //       child: GestureDetector(
+      //   //         onTap: () {
+      //   //           if (LoginUtil.isNotLogin) return;
+      //   //           Get.to(() => MessageCenterPage());
+      //   //         },
+      //   //         child: Image.asset(R.ASSETS_ICONS_ICON_PROPERTY_MESSAGE_PNG,
+      //   //             height: 40.w, width: 40.w),
+      //   //       )),
+      //   // ),
+      // ],
       expandedHeight: 420.w,
       backgroundColor: Colors.white,
       flexibleSpace: Stack(
@@ -156,7 +156,7 @@ class _PropertyPageState extends State<PropertyPage>
               bottom: 0),
           Positioned(
             child: Container(
-              margin: EdgeInsets.only(left: 32.w, right: 32.w),
+              margin: EdgeInsets.only(left: 32.w, right: 32.w,top: 10.w),
               width: 686.w,
               height: 74.w,
               decoration: BoxDecoration(

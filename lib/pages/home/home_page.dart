@@ -124,7 +124,7 @@ class _HomePageState extends State<HomePage>
                   end: -4.w,
                 ),
                 badgeContent: Text(
-                  (sum).toString(),
+                  (sum>99?99:sum).toString(),
                   style: TextStyle(color: Colors.white, fontSize: 20.sp),
                 ),
                 child: GestureDetector(
@@ -511,12 +511,12 @@ class _HomePageState extends State<HomePage>
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         getFunctionBtn(
-            '报事报修', R.ASSETS_ICONS_ICON_MAIN_FIX_PNG, () => FixedSubmitPage()),
-        getFunctionBtn('设施预约', R.ASSETS_ICONS_ICON_MAIN_SUBSCRIBE_PNG,
+            '报事报修', R.ASSETS_ICONS_FUNC_BSBX_PNG, () => FixedSubmitPage()),
+        getFunctionBtn('设施预约', R.ASSETS_ICONS_FUNC_SSYY_PNG,
             () => FacilityAppointmentPage()),
-        getFunctionBtn('生活缴费', R.ASSETS_ICONS_ICON_MAIN_PAY_PNG,
+        getFunctionBtn('生活缴费', R.ASSETS_ICONS_FUNC_SHJF_PNG,
             () => LifePayChoosePage()),
-        getFunctionBtn('全部应用', R.ASSETS_ICONS_ICON_MAIN_ALL_PNG,
+        getFunctionBtn('全部应用', R.ASSETS_ICONS_FUNC_ALL_PNG,
             () => AllApplicationPage()),
       ],
     );

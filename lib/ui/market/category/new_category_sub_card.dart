@@ -26,7 +26,7 @@ class NewCategorySubCard extends StatelessWidget {
         children: [
           Spacer(),
           FadeInImage.assetNetwork(
-            image:'',
+            image:API.image(subModels.imgUrls!.isNotEmpty? subModels.imgUrls!.first :''),//subModels.imgUrls!.isNotEmpty? subModels.imgUrls!.first :'',
             placeholder: R.ASSETS_IMAGES_PLACEHOLDER_WEBP,
             height: 75.w,
             width: 75.w,
@@ -49,7 +49,7 @@ class NewCategorySubCard extends StatelessWidget {
         ],
       ),
       onPressed: () async {
-        Get.to(()=> SearchGoodsPage(search:subModels.name ,));
+        Get.to(()=> SearchGoodsPage(categoryName:subModels.name ,categoryId:subModels.id ,));
         // await Get.to(
         //   () => GoodsListView(
         //     model: model,

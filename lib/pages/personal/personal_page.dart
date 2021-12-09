@@ -331,13 +331,9 @@ class _PersonalIndexState extends State<PersonalIndex>
               alignment: Alignment.topCenter,
 
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: <Color>[
-                    Color(0xFFF9D57A),
-                    Color(0xFFF9D57A),
-                  ],
+                image: DecorationImage(
+                  image: AssetImage(R.ASSETS_IMAGES_MY_BG_PNG),
+                  fit: BoxFit.cover,
                 ),
               ),
               padding: EdgeInsets.only(top: 100.w),
@@ -467,7 +463,7 @@ class _PersonalIndexState extends State<PersonalIndex>
             ),
             Padding(
               
-              padding: EdgeInsets.only(top: 289.w),
+              padding: EdgeInsets.only(top: 350.w),
               child: Column(
 
                 children: [

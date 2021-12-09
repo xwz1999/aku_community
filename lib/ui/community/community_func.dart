@@ -5,6 +5,7 @@ import 'package:aku_community/model/community/community_topic_model.dart';
 import 'package:aku_community/model/community/hot_news_model.dart';
 import 'package:aku_community/model/community/swiper_model.dart';
 import 'package:aku_community/model/good/category_model.dart';
+import 'package:aku_community/model/good/market_swiper_model.dart';
 import 'package:aku_community/models/market/goods_classification.dart';
 import 'package:aku_community/models/market/goods_popular_model.dart';
 import 'package:aku_community/models/market/order/goods_home_model.dart';
@@ -130,6 +131,17 @@ class CommunityFunc {
           .toList();
     }
 
+  }
+  ///获取商城的轮播图
+  static Future<List<MarketSwiperModel>> marketSwiper() async {
+    BaseModel model = await NetUtil().get(
+      API.market.findRotationList,
+    );
+    if (model.data!.length == 0)
+      return [];
+    return (model.data as List)
+        .map((e) => MarketSwiperModel.fromJson(e))
+        .toList();
   }
 
 

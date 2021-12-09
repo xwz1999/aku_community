@@ -15,7 +15,8 @@ import 'new_category_sub_view.dart';
 
 class NewCategoryPage extends StatefulWidget {
   final List<CategoryModel> models;
-  NewCategoryPage({Key? key, required this.models}) : super(key: key);
+  final int index;
+  NewCategoryPage({Key? key, required this.models, required this.index}) : super(key: key);
 
   @override
   _NewCategoryPageState createState() => _NewCategoryPageState();
@@ -28,7 +29,8 @@ class _NewCategoryPageState extends State<NewCategoryPage>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: widget.models.length, vsync: this);
+    _index=widget.index;
+    _tabController = TabController(length: widget.models.length, vsync: this,initialIndex: widget.index);
   }
 
   @override

@@ -546,9 +546,11 @@ class _Market {
   ///jcook商城 订单 查看物流
   String get findLogistics => '/user/jcookOrder/findLogistics';
 
-
   ///jcook商城 订单 确认收货
   String get confirmOrder => '/user/jcookOrder/confirm';
+
+  ///jcook商城 查询轮播图信息集合
+  String get findRotationList => '/user/jcookGoods/findRotationList';
 
 
 

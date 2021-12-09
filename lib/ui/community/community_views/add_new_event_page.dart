@@ -153,11 +153,11 @@ class _AddNewEventPageState extends State<AddNewEventPage> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: MaterialButton(
-          padding: EdgeInsets.zero,
-          onPressed: Get.back,
-          child: '取消'.text.size(34.sp).make(),
-        ),
+        // leading: MaterialButton(
+        //   padding: EdgeInsets.zero,
+        //   onPressed: Get.back,
+        //   child: '取消'.text.size(34.sp).make(),
+        // ),
         leadingWidth: 108.w,
         centerTitle: true,
         title: '社区'.text.make(),
