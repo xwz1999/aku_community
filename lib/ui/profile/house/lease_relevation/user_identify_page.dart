@@ -2,7 +2,9 @@ import 'package:aku_community/base/base_style.dart';
 import 'package:aku_community/extensions/widget_list_ext.dart';
 import 'package:aku_community/models/house/lease_echo_model.dart';
 import 'package:aku_community/ui/profile/house/house_func.dart';
+import 'package:aku_community/ui/profile/house/house_item.dart';
 import 'package:aku_community/ui/profile/house/lease_relevation/tenant_house_list_page.dart';
+import 'package:aku_community/ui/profile/house/pick_building_page.dart';
 import 'package:aku_community/widget/bee_scaffold.dart';
 import 'package:aku_community/widget/bottom_sheets/sex_bottom_sheet.dart';
 import 'package:aku_community/widget/buttons/bottom_button.dart';
@@ -27,6 +29,12 @@ class _UserIdentifyPageState extends State<UserIdentifyPage> {
   TextEditingController _indentifyCodeController = TextEditingController();
   String _sex = '请选择性别';
   String _tel = '';
+  HouseItem? _houseItem;
+
+  String get houseItem => _houseItem == null
+      ? ''
+      : '${_houseItem!.building.label}—${_houseItem!.unit.label}—${_houseItem!.room.label}';
+
   @override
   void initState() {
     super.initState();
@@ -58,7 +66,7 @@ class _UserIdentifyPageState extends State<UserIdentifyPage> {
   @override
   Widget build(BuildContext context) {
     return BeeScaffold(
-      title: '用户认证',
+      title: '用户信息',
       bodyColor: Colors.white,
       body: ListView(
         padding: EdgeInsets.all(32.w),
@@ -100,10 +108,13 @@ class _UserIdentifyPageState extends State<UserIdentifyPage> {
             isRequire: true,
           ),
           BeeInputRow.button(
-            title: '身份',
-            hintText: '租客',
+            title: '选择入住房屋',
+            hintText: houseItem,
             isRequire: true,
-            onPressed: () async {},
+            onPressed: () async {
+              _houseItem = await Get.to(() => PickBuildingPage());
+              setState(() {});
+            },
           )
         ].sepWidget(separate: 32.w.heightBox),
       ),
