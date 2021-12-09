@@ -57,6 +57,10 @@ class FireDialog {
         return '设备故障';
       case 3:
         return '管家端APP报警';
+      case 4:
+        return '危情报警';
+      case 5:
+        return '报警已解除';
       default:
         return '';
 
@@ -75,6 +79,10 @@ class FireDialog {
             '${alarmModel.deviceName}联系方式：${alarmModel.alarmNo}\n'+
             '如未能联系到${alarmModel.deviceName}。可择情报警'
         ;
+      case 4:
+        return '报警等级————${alarmModel.alarmContent}\n\n${alarmModel.planContent}';
+      case 5:
+        return '${alarmModel.planContent}';
       default:
         return '';
 
@@ -88,6 +96,20 @@ class FireDialog {
         return Image.asset(R.ASSETS_ICONS_DEVICE_ALARM_PNG,width: 100.w,height: 100.w,fit: BoxFit.fitHeight,);
       case 3:
         return Image.asset(R.ASSETS_ICONS_APP_ALARM_PNG,width: 100.w,height: 100.w,fit: BoxFit.fitHeight,);
+      case 4:
+        return Image.asset(
+          R.ASSETS_ICONS_FIRE_ALARM_PNG,
+          width: 110.w,
+          height: 110.w,
+          fit: BoxFit.contain,
+        );
+      case 5:
+        return Image.asset(
+          R.ASSETS_ICONS_ARLAM_RELIEVE_PNG,
+          width: 110.w,
+          height: 110.w,
+          fit: BoxFit.contain,
+        );
       default:
         return SizedBox();
 

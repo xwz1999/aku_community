@@ -139,6 +139,10 @@ class R {
   static const String ASSETS_ICONS_APPOINTMENT_DATE_PNG =
       'assets/icons/appointment_date.png';
 
+  /// ![preview](file:///Users/datang/aku_community/assets/icons/arlam_relieve.png)
+  static const String ASSETS_ICONS_ARLAM_RELIEVE_PNG =
+      'assets/icons/arlam_relieve.png';
+
   /// ![preview](file:///Users/datang/aku_community/assets/icons/article_count.png)
   static const String ASSETS_ICONS_ARTICLE_COUNT_PNG =
       'assets/icons/article_count.png';
