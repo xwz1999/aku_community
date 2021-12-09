@@ -12,7 +12,6 @@ import 'package:aku_community/ui/profile/house/house_func.dart';
 import 'package:aku_community/ui/profile/house/identify_selection_page.dart';
 import 'package:aku_community/ui/profile/house/lease_pay_query/lease_pay_query_page.dart';
 import 'package:aku_community/ui/profile/house/lease_relevation/tenant_house_list_page.dart';
-import 'package:aku_community/ui/profile/house/my_house_list.dart';
 import 'package:aku_community/utils/headers.dart';
 import 'package:aku_community/widget/bee_scaffold.dart';
 import 'package:aku_community/widget/others/user_tool.dart';
@@ -24,6 +23,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:power_logger/power_logger.dart';
 import 'package:provider/provider.dart';
+
+import 'my_house_list.dart';
 
 class HouseOwnersPage extends StatefulWidget {
   final int identify;
@@ -126,6 +127,7 @@ class _HouseOwnersPageState extends State<HouseOwnersPage> {
         ? BeeScaffold(title: '我的房屋')
         : BeeScaffold(
             title: '我的房屋',
+
             actions: [
               isTourist
                   ? SizedBox()
