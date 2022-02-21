@@ -3,7 +3,7 @@
     "@appName":{
         "description": "应用名称"
     },
-    "tempPlotName": "人才公寓智慧小区",
+    "tempPlotName": "南宁新城悦隽风华智慧小区",
     "@tempPlotName":{
         "description": "临时使用的小区名称"
     }

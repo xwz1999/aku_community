@@ -1,6 +1,6 @@
 class API {
   ///HOST
-  static const String host = 'http://39.103.177.88:8804';
+  static const String host = 'http://121.41.26.225:8004';
 
   ///接口基础地址
   static const String baseURL = '$host/IntelligentCommunity/app';
@@ -315,16 +315,11 @@ class _Manager {
   String get sharePayRecord =>
       '/user/meterReadingShareDetails/findAllMeterShareOrderByTel';
 
-
   ///查询所有的已发布的户型说明
-  String get houseType =>
-      '/user/houseTypeDescription/list';
-
+  String get houseType => '/user/houseTypeDescription/list';
 
   ///查询所有的周边企业信息
-  String get surroundingEnterprises =>
-      '/user/surroundingEnterprises/list';
-
+  String get surroundingEnterprises => '/user/surroundingEnterprises/list';
 }
 
 class _Community {

@@ -1,17 +1,16 @@
-import 'package:flutter/material.dart';
-
-import 'package:flustars/flustars.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:velocity_x/velocity_x.dart';
-
 import 'package:aku_community/base/base_style.dart';
 import 'package:aku_community/constants/api.dart';
 import 'package:aku_community/models/service_browse/service_browse_list_mode.dart';
 import 'package:aku_community/pages/service_browse/service_browse_detail_page.dart';
 import 'package:aku_community/pages/things_page/widget/bee_list_view.dart';
+import 'package:aku_community/utils/headers.dart';
 import 'package:aku_community/widget/bee_scaffold.dart';
+import 'package:flustars/flustars.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 class ServiceBrowsePage extends StatefulWidget {
   ServiceBrowsePage({Key? key}) : super(key: key);
@@ -90,7 +89,11 @@ class _ServiceBrowsePageState extends State<ServiceBrowsePage> {
           32.w.heightBox,
           Row(
             children: [
-              '南宁人才公寓'.text.size(20.sp).color(ktextSubColor).make(),
+              '${S.of(context)!.tempPlotName}'
+                  .text
+                  .size(20.sp)
+                  .color(ktextSubColor)
+                  .make(),
               Spacer(),
               '发布于 ${DateUtil.formatDateStr(model.createDate, format: 'MM-dd HH:mm')}'
                   .text

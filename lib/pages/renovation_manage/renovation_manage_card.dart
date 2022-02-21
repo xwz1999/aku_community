@@ -1,14 +1,13 @@
-import 'package:flutter/material.dart';
-
-import 'package:flustars/flustars.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:velocity_x/velocity_x.dart';
-
 import 'package:aku_community/base/base_style.dart';
 import 'package:aku_community/const/resource.dart';
 import 'package:aku_community/pages/renovation_manage/renovation_manage_detail_page.dart';
 import 'package:aku_community/pages/renovation_manage/renovation_map.dart';
+import 'package:aku_community/utils/headers.dart';
+import 'package:flustars/flustars.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 class RenovationManageCard extends StatefulWidget {
   final int index;
@@ -56,7 +55,8 @@ class _RenovationManageCardState extends State<RenovationManageCard> {
               ],
             ),
             24.w.heightBox,
-            _buildTile(R.ASSETS_ICONS_ARTICLE_NAME_PNG, '小区名称', '人才公寓'),
+            _buildTile(R.ASSETS_ICONS_ARTICLE_NAME_PNG, '小区名称',
+                '${S.of(context)!.tempPlotName}'),
             12.w.heightBox,
             _buildTile(
               R.ASSETS_ICONS_APPOINTMENT_ADDRESS_PNG,

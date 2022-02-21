@@ -1,53 +1,48 @@
-import 'package:aku_community/models/house_introduce/house_introduce_model.dart';
-import 'package:aku_community/models/surrounding_enterprises/surrounding_enterprises_model.dart';
-import 'package:aku_community/pages/surrounding_enterprises/surrounding_enterprises_detail_page.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-
-import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:get/get.dart';
-import 'package:velocity_x/velocity_x.dart';
-
 import 'package:aku_community/base/base_style.dart';
 import 'package:aku_community/constants/api.dart';
 import 'package:aku_community/constants/app_theme.dart';
 import 'package:aku_community/model/common/img_model.dart';
+import 'package:aku_community/models/surrounding_enterprises/surrounding_enterprises_model.dart';
+import 'package:aku_community/pages/surrounding_enterprises/surrounding_enterprises_detail_page.dart';
 import 'package:aku_community/pages/things_page/widget/bee_list_view.dart';
 import 'package:aku_community/utils/headers.dart';
 import 'package:aku_community/widget/bee_scaffold.dart';
-
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:get/get.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 class SurroundingEnterprisesPage extends StatefulWidget {
   SurroundingEnterprisesPage({Key? key}) : super(key: key);
 
   @override
-  _SurroundingEnterprisesPageState createState() => _SurroundingEnterprisesPageState();
+  _SurroundingEnterprisesPageState createState() =>
+      _SurroundingEnterprisesPageState();
 }
 
-
-
-class _SurroundingEnterprisesPageState extends State<SurroundingEnterprisesPage> {
+class _SurroundingEnterprisesPageState
+    extends State<SurroundingEnterprisesPage> {
   EasyRefreshController _refreshController = EasyRefreshController();
 
   @override
   void initState() {
     super.initState();
-
   }
-
 
   Widget _buildCard(SurroundingEnterprisesModel model) {
     return GestureDetector(
-      onTap: (){
-        Get.to(SurroundingEnterprisesDetailPage(surroundingEnterprisesModel: model,));
+      onTap: () {
+        Get.to(SurroundingEnterprisesDetailPage(
+          surroundingEnterprisesModel: model,
+        ));
       },
       child: Container(
         padding: EdgeInsets.all(20.w),
         color: Colors.white,
-        width:750.w,
+        width: 750.w,
         height: 250.w,
-        child:
-        Row(
+        child: Row(
           //  .padding(EdgeInsets.all(20.w)).white.withRounded(value: 8.w).make()
 
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,8 +68,7 @@ class _SurroundingEnterprisesPageState extends State<SurroundingEnterprisesPage>
                     style: TextStyle(
                         fontSize: 30.sp,
                         fontWeight: FontWeight.bold,
-                        color: ktextPrimary
-                    ),
+                        color: ktextPrimary),
                     maxLines: 4,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -84,11 +78,7 @@ class _SurroundingEnterprisesPageState extends State<SurroundingEnterprisesPage>
                   width: 400.w,
                   child: Text(
                     '${model.content}',
-                    style: TextStyle(
-                        fontSize: 24.sp,
-
-                        color: ktextPrimary
-                    ),
+                    style: TextStyle(fontSize: 24.sp, color: ktextPrimary),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -97,13 +87,13 @@ class _SurroundingEnterprisesPageState extends State<SurroundingEnterprisesPage>
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    '南宁人才公寓'
+                    '${S.of(context)!.tempPlotName}'
                         .text
                         .size(20.sp)
                         .color(ktextThirdColor)
                         .make(),
                     Spacer(),
-                    '发布于${model.getReleaseDate.toString().substring(5,16)}'
+                    '发布于${model.getReleaseDate.toString().substring(5, 16)}'
                         .text
                         .size(20.sp)
                         .color(ktextThirdColor)
@@ -124,7 +114,6 @@ class _SurroundingEnterprisesPageState extends State<SurroundingEnterprisesPage>
       systemStyle: SystemStyle.genStyle(bottom: Color(0xFF2A2A2A)),
       body: BeeListView<SurroundingEnterprisesModel>(
         path: API.manager.surroundingEnterprises,
-
         convert: (model) {
           return model.tableList!
               .map((e) => SurroundingEnterprisesModel.fromJson(e))
@@ -135,7 +124,6 @@ class _SurroundingEnterprisesPageState extends State<SurroundingEnterprisesPage>
           return ListView.separated(
             itemBuilder: (context, index) {
               return _buildCard(items[index]);
-
             },
             separatorBuilder: (context, index) => 20.hb,
             itemCount: items.length,

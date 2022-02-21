@@ -1,9 +1,3 @@
-import 'package:flutter/material.dart';
-
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:velocity_x/velocity_x.dart';
-
 import 'package:aku_community/base/base_style.dart';
 import 'package:aku_community/const/resource.dart';
 import 'package:aku_community/constants/api.dart';
@@ -14,8 +8,13 @@ import 'package:aku_community/ui/market/order/my_order_detail_page.dart';
 import 'package:aku_community/ui/market/order/my_order_evaluation_page.dart';
 import 'package:aku_community/ui/market/order/my_order_func.dart';
 import 'package:aku_community/ui/market/order/my_order_refund_page.dart';
+import 'package:aku_community/utils/headers.dart';
 import 'package:aku_community/widget/bee_divider.dart';
 import 'package:aku_community/widget/buttons/card_bottom_button.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 class MyOrderCard extends StatefulWidget {
   final MyOrderListModel model;
@@ -129,7 +128,7 @@ class _MyOrderCardState extends State<MyOrderCard> {
             40.w.heightBox,
             ...[
               _rowTile('下单时间', widget.model.arrivalDateString),
-              _rowTile('到达地点', '人才公寓小区北侧门口'),
+              _rowTile('到达地点', '${S.of(context)!.tempPlotName}北侧门口'),
               _rowTile('发货时间', widget.model.sendDateString),
             ].sepWidget(separate: 16.w.heightBox),
             ..._bottomWidget(),

@@ -1,15 +1,14 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
-
-import 'package:flustars/flustars.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:velocity_x/velocity_x.dart';
-
 import 'package:aku_community/base/base_style.dart';
 import 'package:aku_community/const/resource.dart';
 import 'package:aku_community/pages/renovation_manage/renovation_map.dart';
+import 'package:aku_community/utils/headers.dart';
 import 'package:aku_community/widget/bee_scaffold.dart';
+import 'package:flustars/flustars.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 class RenovationManageDetailPage extends StatefulWidget {
   RenovationManageDetailPage({Key? key}) : super(key: key);
@@ -199,7 +198,7 @@ class _RenovationManageDetailPageState
       [
         _buildInfoCard(
           tag: '家',
-          midTop: '人才公寓',
+          midTop: '${S.of(context)!.tempPlotName}',
           midBottom: '1幢-1单元-302',
           name: '业主：' + '马泽鹏',
           phone: '13720183183',
