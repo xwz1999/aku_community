@@ -1,9 +1,9 @@
 class API {
   ///HOST
-  static const String host = 'http://121.41.26.225:8004';
+  static const String host = 'http://test.kaidalai.cn/';
 
   ///接口基础地址
-  static const String baseURL = '$host/IntelligentCommunity/app';
+  static const String baseURL = '$host/api/app';
 
   ///静态资源路径
   static String get resource => '$host/static';

@@ -8,6 +8,9 @@ import 'package:aku_community/provider/app_provider.dart';
 import 'package:aku_community/provider/user_provider.dart';
 import 'package:aku_community/utils/developer_util.dart';
 import 'package:aku_community/utils/hive_store.dart';
+import 'package:amap_flutter_base/amap_flutter_base.dart';
+import 'package:amap_flutter_location/amap_flutter_location.dart';
+import 'package:amap_flutter_location/amap_location_option.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -126,6 +129,8 @@ class _SplashPageState extends State<SplashPage> {
       // await AmapLocation.instance.init(iosKey: 'ios key');
       if (Platform.isAndroid || Platform.isIOS) {
         await Permission.locationWhenInUse.request();
+        AMapFlutterLocation.updatePrivacyShow(true, true);
+        AMapFlutterLocation.updatePrivacyAgree(true);
       }
       await _initOp();
       Get.offAll(() => TabNavigator());

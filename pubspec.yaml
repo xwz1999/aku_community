@@ -83,9 +83,9 @@ dependencies:
   #角标
   badges: ^2.0.0-nullsafety.1
   #高德地图相关
-  amap_flutter_map: ^2.0.1
-  amap_flutter_location: ^2.0.0
-  amap_flutter_base: ^2.0.0
+  amap_flutter_map: ^3.0.0
+  amap_flutter_location: ^3.0.0
+  amap_flutter_base: ^3.0.0
   #动态文字
   animated_text_kit: ^4.2.1
 #  #谷歌崩溃记录分析

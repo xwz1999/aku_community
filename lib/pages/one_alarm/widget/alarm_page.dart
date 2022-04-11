@@ -64,6 +64,7 @@ class _AlarmPageState extends State<AlarmPage> {
         alignment: Alignment.topCenter,
         children: [
           AMapWidget(
+            privacyStatement: AMapPrivacyStatement(hasContains: true, hasShow: true, hasAgree: true),
             onMapCreated: (controller) {
               final appProvider =
                   Provider.of<AppProvider>(context, listen: false);

@@ -21,21 +21,21 @@ packages:
       name: amap_flutter_base
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.0"
+    version: "3.0.0"
   amap_flutter_location:
     dependency: "direct main"
     description:
       name: amap_flutter_location
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.0"
+    version: "3.0.0"
   amap_flutter_map:
     dependency: "direct main"
     description:
       name: amap_flutter_map
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.0.1"
+    version: "3.0.0"
   analyzer:
     dependency: transitive
     description:
