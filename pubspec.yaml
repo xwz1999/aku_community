@@ -88,9 +88,9 @@ dependencies:
   amap_flutter_base: ^2.0.0
   #动态文字
   animated_text_kit: ^4.2.1
-  #谷歌崩溃记录分析
-  firebase_core: ^1.1.1
-  firebase_crashlytics: ^2.0.3
+#  #谷歌崩溃记录分析
+#  firebase_core: ^1.1.1
+#  firebase_crashlytics: ^2.0.3
   #分享功能
   share: ^2.0.1
   collection: ^1.15.0

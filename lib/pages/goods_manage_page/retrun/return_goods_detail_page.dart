@@ -12,7 +12,6 @@ import 'package:aku_community/model/common/img_model.dart';
 import 'package:aku_community/model/manager/article_return_list_model.dart';
 import 'package:aku_community/utils/network/base_model.dart';
 import 'package:aku_community/utils/network/net_util.dart';
-import 'package:aku_community/widget/animated/animated_scale.dart';
 import 'package:aku_community/widget/bee_scaffold.dart';
 import 'package:aku_community/widget/buttons/radio_button.dart';
 
@@ -95,6 +94,7 @@ class _ReturnGoodsDetailPageState extends State<ReturnGoodsDetailPage> {
           curve: Curves.easeInOutCubic,
           opacity: allSelect ? 1 : 0,
           child: AnimatedScale(
+            duration: Duration(milliseconds: 300),
             scale: allSelect ? 1 : 0,
             child: Container(
               height: 24.w,

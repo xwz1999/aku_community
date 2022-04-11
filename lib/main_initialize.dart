@@ -6,8 +6,6 @@ import 'package:aku_community/provider/app_provider.dart';
 import 'package:aku_community/utils/message_parser.dart';
 import 'package:aku_community/utils/websocket/fire_dialog.dart';
 import 'package:aku_community/utils/websocket/web_socket_util.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -22,16 +20,16 @@ class MainInitialize {
 
   ///初始化firebase
   static Future initFirebase() async {
-    await Firebase.initializeApp();
+    // await Firebase.initializeApp();
     // web MacOS Platform not support firebase
     if (!kIsWeb && !Platform.isMacOS) {
-      FirebaseCrashlytics.instance
-          .setCrashlyticsCollectionEnabled(kReleaseMode);
+      // FirebaseCrashlytics.instance
+      //     .setCrashlyticsCollectionEnabled(kReleaseMode);
     }
     FlutterError.onError = (detail) {
       LoggerData.addData(detail);
       if (kReleaseMode && !kIsWeb && !Platform.isMacOS) {
-        FirebaseCrashlytics.instance.recordFlutterError(detail);
+        // FirebaseCrashlytics.instance.recordFlutterError(detail);
       }
       FlutterError.presentError(detail);
     };

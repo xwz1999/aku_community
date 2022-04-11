@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:aku_community/base/base_style.dart';
 import 'package:aku_community/utils/headers.dart';
-import 'package:aku_community/widget/animated/animated_scale.dart';
 
 class BeeRadio<T> extends StatefulWidget {
   final T value;
@@ -40,6 +39,7 @@ class _BeeRadioState extends State<BeeRadio> {
         curve: Curves.easeInOutCubic,
         opacity: _selected ? 1 : 0,
         child: AnimatedScale(
+          duration: Duration(milliseconds: 300),
           scale: _selected ? 1 : 0,
           child: Container(
             height: 24.w,

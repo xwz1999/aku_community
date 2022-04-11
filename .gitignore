@@ -62,3 +62,5 @@ coverage/
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 commit.csv
 .~lock.commit.csv#
+tool/_build.dart
+tool/config.dart
