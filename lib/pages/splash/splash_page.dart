@@ -129,8 +129,12 @@ class _SplashPageState extends State<SplashPage> {
       // await AmapLocation.instance.init(iosKey: 'ios key');
       if (Platform.isAndroid || Platform.isIOS) {
         await Permission.locationWhenInUse.request();
+        AMapFlutterLocation.setApiKey('717cf8c606307809bcbd6661123b9837',
+            'e41ec048f2f0cf059ecffe7347ca17d2');
+
         AMapFlutterLocation.updatePrivacyShow(true, true);
         AMapFlutterLocation.updatePrivacyAgree(true);
+
       }
       await _initOp();
       Get.offAll(() => TabNavigator());

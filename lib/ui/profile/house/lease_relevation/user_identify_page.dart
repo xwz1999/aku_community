@@ -27,6 +27,8 @@ class UserIdentifyPage extends StatefulWidget {
 class _UserIdentifyPageState extends State<UserIdentifyPage> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _indentifyCodeController = TextEditingController();
+
+  TextEditingController _telController = TextEditingController();
   String _sex = '请选择性别';
   String _tel = '';
   HouseItem? _houseItem;
@@ -47,7 +49,7 @@ class _UserIdentifyPageState extends State<UserIdentifyPage> {
         HouseFunc.toSex[_model.sex];
       }
       if (_model.tel.isNotEmpty) {
-        _tel = _model.tel;
+        _telController.text = _model.tel;
       }
       if (!_model.idNumber.isEmptyOrNull) {
         _indentifyCodeController.text = _model.idNumber!;
@@ -87,23 +89,24 @@ class _UserIdentifyPageState extends State<UserIdentifyPage> {
                   onChoose: (String value) {
                     _sex = value;
                     Get.back();
-                    setState(() {});
+                    //setState(() {});
                   },
                 ),
               );
+              if(mounted)
               setState(() {});
             },
           ),
-          BeeInputRow.button(
+          BeeInputRow(
             title: '手机号码',
-            onPressed: () {},
+           
             isRequire: true,
-            hintText: _tel,
+            hintText: _telController.text, controller: _telController,
           ),
           BeeInputRow(
             title: '身份证号码',
             controller: _indentifyCodeController,
-            formatters: [FilteringTextInputFormatter.digitsOnly],
+            // formatters: [FilteringTextInputFormatter.digitsOnly],
             hintText: '请输入身份证号',
             isRequire: true,
           ),

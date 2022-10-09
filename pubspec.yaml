@@ -2,7 +2,7 @@ name: aku_community
 description: A new Flutter project.
 publish_to: "none"
 
-version: 1.8.5-dev+47
+version: 1.8.8-dev+49
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -48,7 +48,7 @@ dependencies:
   #虚线边框
   dotted_border: ^2.0.0
   #手写签字板
-  signature: ^4.1.1
+  signature: ^5.1.0
 
   #支付宝支付功能
   tobias: ^2.1.0
@@ -57,7 +57,7 @@ dependencies:
   #路由相关
   get: ^4.1.4
   #各种扩展
-  velocity_x: ^3.0.0
+  velocity_x: 3.4.0
   #本地化存储
   hive: ^2.0.4
   hive_flutter: ^1.0.0
@@ -103,7 +103,7 @@ dependencies:
   #model 插件
   equatable: ^2.0.0
   #pdf文件预览
-  advance_pdf_viewer: ^2.0.0
+  advance_pdf_viewer_fork: ^2.0.0
   #扩展组件
   expandable: ^5.0.1
   #加载网络图片

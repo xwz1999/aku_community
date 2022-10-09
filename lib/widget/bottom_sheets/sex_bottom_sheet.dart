@@ -21,10 +21,14 @@ class SexBottomSheet extends StatelessWidget {
           child: '取消'.text.size(28.sp).color(ktextSubColor).isIntrinsic.make()),
       actions: [
         CupertinoActionSheetAction(
-            onPressed: onChoose('男'),
+            onPressed:(){
+              onChoose('男');
+            },
             child: '男'.text.size(30.sp).color(ktextPrimary).isIntrinsic.make()),
         CupertinoActionSheetAction(
-            onPressed: onChoose('女'),
+            onPressed:(){
+              onChoose('女');
+            },
             child: '女'.text.size(30.sp).color(ktextPrimary).isIntrinsic.make())
       ],
     );

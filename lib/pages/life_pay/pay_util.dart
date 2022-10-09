@@ -1,9 +1,14 @@
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:aku_community/constants/config.dart';
 import 'package:aku_community/models/pay/pay_model.dart';
+import 'package:aku_community/models/pay/wx_pay_model.dart';
 import 'package:aku_community/utils/network/net_util.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
+import 'package:fluwx/fluwx.dart';
 import 'package:power_logger/power_logger.dart';
 import 'package:tobias/tobias.dart';
 
@@ -102,5 +107,56 @@ class PayUtil {
       LoggerData.addData(e);
       return false;
     }
+  }
+
+  ///微信支付
+
+  StreamSubscription? _wxPayStream;
+
+  void wxPayAddListener(
+      {required VoidCallback paySuccess,
+        Function(BaseWeChatResponse)? payError}) {
+    _wxPayStream = weChatResponseEventHandler.listen((event) {
+      if (kDebugMode) {
+        print(event);
+        print('errorCode:${event.errCode}    errorStr:${event.errStr}');
+      }
+      if (event.errCode == 0) {
+        paySuccess();
+      } else {
+        print('1231231231232131221');
+        print(event);
+        LoggerData.addData(
+            'errorCode:${event.errCode}    errorStr:${event.errStr ?? '支付失败'}');
+        LoggerData.addData(
+            'event:${event}');
+        BotToast.showText(text: event.errStr ?? '支付失败');
+        if (payError != null) payError(event);
+        //payError == null ? null : payError(event);
+      }
+    });
+  }
+
+  void removeWxPayListener() {
+    _wxPayStream?.cancel();
+  }
+
+  Future callWxPay({
+    required WxPayModel payModel,
+  }) async {
+    print(payModel.partnerId);
+    print(payModel.prepayId);
+    print(payModel.package);
+    print(payModel.nonceStr);
+    print(payModel.timeStamp);
+    print(payModel.sign);
+    await payWithWeChat(
+        appId:AppConfig.wechatAppId,
+        partnerId: payModel.partnerId,
+        prepayId: payModel.prepayId,
+        packageValue: payModel.package,
+        nonceStr: payModel.nonceStr,
+        timeStamp: int.parse(payModel.timeStamp),
+        sign: payModel.sign);
   }
 }

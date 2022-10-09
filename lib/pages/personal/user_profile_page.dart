@@ -101,6 +101,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   height: 56.w,
                   width: 56.w,
                   fit: BoxFit.cover,
+                  imageErrorBuilder: (context, error, stackTrace) {
+                    return Image.asset(R.ASSETS_IMAGES_PLACEHOLDER_WEBP,height: 56.w,
+                      width: 56.w,);
+                  },
                 ),
               ),
             ),

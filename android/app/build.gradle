@@ -95,8 +95,8 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.amap.api:3dmap:latest.integration'
-    implementation 'com.amap.api:location:latest.integration'
+    implementation 'com.amap.api:3dmap:8.1.0'
+    implementation 'com.amap.api:location:5.2.0'
     implementation 'com.android.support:multidex:2.0.1'
 }
 

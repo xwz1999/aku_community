@@ -55,7 +55,7 @@ class _TopicDetailPageState extends State<TopicDetailPage> {
                 .toList();
           },
           path: API.community.eventByTopicId,
-          extraParams: {'gambitId': widget.model!.id},
+          extraParams: {'gambitId': widget.model!.id,'orderBy':1},
           controller: _refreshController,
           builder: (items) {
             return CustomScrollView(

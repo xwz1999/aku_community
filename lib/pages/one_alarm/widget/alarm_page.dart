@@ -69,8 +69,8 @@ class _AlarmPageState extends State<AlarmPage> {
               final appProvider =
                   Provider.of<AppProvider>(context, listen: false);
               LatLng _target = LatLng(
-                (appProvider.location?['latitude'] ?? 0) as double,
-                (appProvider.location?['longitude'] ?? 0 )as double,
+                double.parse( (appProvider.location!['latitude'].toString())),
+                double.parse( (appProvider.location!['longitude'].toString())),
               );
               _mapController = controller;
               _mapController!.moveCamera(

@@ -27,6 +27,7 @@ class LeasePayQueryDetailPage extends StatefulWidget {
 }
 
 class _LeasePayQueryDetailPageState extends State<LeasePayQueryDetailPage> {
+  String _payMethod = '支付宝';
   @override
   Widget build(BuildContext context) {
     return BeeScaffold(
@@ -57,21 +58,41 @@ class _LeasePayQueryDetailPageState extends State<LeasePayQueryDetailPage> {
         child: BottomButton(
             onPressed: () async {
               Function cancel = BotToast.showLoading();
-              bool result = false;
+
               try {
-                String code = await HouseFunc().leaseRentBillOrder(
-                    UserTool.appProveider.selectedHouse!.sysLeaseId!,
-                    1, //写死为支付宝
-                    widget.model.price.toDouble());
-                result = await PayUtil()
-                    .callAliPay(code, API.pay.leaseRentBillOrderCheck);
+                if( _payMethod=='支付宝')
+                {
+                  String code = await HouseFunc().leaseRentBillOrder(
+                      UserTool.appProveider.selectedHouse!.sysLeaseId!,
+                      1, //写死为支付宝
+                      widget.model.price.toDouble()
+                  );
+                  bool result = false;
+                  result = await PayUtil()
+                      .callAliPay(code, API.pay.leaseRentBillOrderCheck);
+                  if (result) {
+                    Get.off(() => PayFinishPage());
+                  }
+
+                }else if(_payMethod=='微信'){
+                  await HouseFunc()
+                      .leaseRentBillOrderVxPay(   UserTool.appProveider.selectedHouse!.sysLeaseId!,
+                      2, //写死为支付宝
+                      widget.model.price.toDouble()).then((value) {
+                    if(value!=null){
+                      PayUtil().callWxPay(payModel: value);
+                    }
+                  });
+                }else{
+                  BotToast.showText(text: '请先选择支付方式');
+                }
+
               } catch (e) {
+                print(e.toString());
                 LoggerData.addData(e);
               }
-              if (result) {
-                Get.off(() => PayFinishPage());
-              }
               cancel();
+
             },
             child: '立即支付'.text.size(32.sp).bold.black.make()),
       ),

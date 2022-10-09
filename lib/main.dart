@@ -59,7 +59,7 @@ class _MyAppState extends State<MyApp> {
         },
         child: ScreenUtilInit(
           designSize: Size(750, 1334),
-          builder: () => GetMaterialApp(
+          builder: (context,widget) => GetMaterialApp(
             onGenerateTitle: (context) => S.of(context)!.appName,
             debugShowCheckedModeBanner: false,
             theme: AppTheme.theme,

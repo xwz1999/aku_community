@@ -609,4 +609,10 @@ class R {
 
   /// ![preview](file:///Users/datang/aku_community/assets/tab/nvz.png)
   static const String ASSETS_TAB_NVZ_PNG = 'assets/tab/nvz.png';
+
+  /// ![preview](file:///Users/datang/aku_community/assets/icons/ic_wx.png)
+  static const String ASSETS_ICONS_IC_WX_PNG = 'assets/icons/ic_wx.png';
+
+  /// ![preview](file:///Users/datang/aku_community/assets/icons/ic_zfb.png)
+  static const String ASSETS_ICONS_IC_ZFB_PNG = 'assets/icons/ic_zfb.png';
 }

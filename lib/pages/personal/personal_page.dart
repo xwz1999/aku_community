@@ -64,7 +64,8 @@ class _PersonalIndexState extends State<PersonalIndex>
                       },
                       child: Container(
                         margin: EdgeInsets.only(left: 32.w),
-                        child: Row(
+                        child: userProvider
+                            .userInfoModel!=null? Row(
                           children: [
                             Hero(
                               tag: 'AVATAR',
@@ -79,6 +80,10 @@ class _PersonalIndexState extends State<PersonalIndex>
                                   height: 106.w,
                                   width: 106.w,
                                   fit: BoxFit.cover,
+                                  imageErrorBuilder: (context, error, stackTrace) {
+                                    return Image.asset(R.ASSETS_IMAGES_PLACEHOLDER_WEBP, height: 106.w,
+                                      width: 106.w,);
+                                  },
                                 ),
                               ),
                             ),
@@ -101,7 +106,7 @@ class _PersonalIndexState extends State<PersonalIndex>
                                         ),
                                       )),
                           ],
-                        ),
+                        ):SizedBox(),
                       ),
                     ),
                     Stack(

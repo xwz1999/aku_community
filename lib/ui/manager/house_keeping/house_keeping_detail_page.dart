@@ -2,6 +2,7 @@ import 'package:aku_community/constants/api.dart';
 import 'package:aku_community/pages/life_pay/pay_finish_page.dart';
 import 'package:aku_community/pages/life_pay/pay_util.dart';
 import 'package:aku_community/ui/manager/house_keeping/house_keeping_func.dart';
+import 'package:aku_community/ui/profile/house/house_func.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,7 @@ class HouseKeepingDetailPage extends StatefulWidget {
   final HouseKeepingListModel model;
   final List<HouseKeepingProcessModel> processModels;
   final VoidCallback callRefresh;
+
   HouseKeepingDetailPage(
       {Key? key,
       required this.model,
@@ -40,6 +42,8 @@ class HouseKeepingDetailPage extends StatefulWidget {
 }
 
 class _HouseKeepingDetailPageState extends State<HouseKeepingDetailPage> {
+  String _payMethod = '支付宝';
+
   @override
   Widget build(BuildContext context) {
     return BeeScaffold(
@@ -98,18 +102,31 @@ class _HouseKeepingDetailPageState extends State<HouseKeepingDetailPage> {
             onPressed: () async {
               Function cancel = BotToast.showLoading();
               try {
-                String code = await HouseKeepingFunc.houseKeepingOrderAlipay(
-                    widget.model.id, 1, widget.model.payFee ?? 0);
-                bool result = await PayUtil()
-                    .callAliPay(code, API.pay.houseKeepingServieceOrderCheck);
-                if (result) {
-                  Get.off(() => PayFinishPage());
+                if (_payMethod == '支付宝') {
+                  String code = await HouseKeepingFunc.houseKeepingOrderAlipay(
+                      widget.model.id, 1, widget.model.payFee ?? 0);
+                  bool result = await PayUtil()
+                      .callAliPay(code, API.pay.houseKeepingServieceOrderCheck);
+                  if (result) {
+                    Get.off(() => PayFinishPage());
+                  }
+                } else if (_payMethod == '微信') {
+                  await HouseFunc()
+                      .housekeepingServiceOrderVxPay(
+                          widget.model.id, 1, widget.model.payFee ?? 0)
+                      .then((value) {
+                    if (value != null) {
+                      PayUtil().callWxPay(payModel: value);
+                    }
+                  });
+                } else {
+                  BotToast.showText(text: '请先选择支付方式');
                 }
               } catch (e) {
                 LoggerData.addData(e);
               }
-              cancel();
               widget.callRefresh();
+              cancel();
             },
             child: '立即支付'.text.size(32.sp).bold.black.make());
       case 5:
@@ -256,9 +273,7 @@ class _HouseKeepingDetailPageState extends State<HouseKeepingDetailPage> {
               .make(),
           16.w.heightBox,
           BeeGridImageView(
-              urls: widget.model.evaluationImgList
-                  .map((e) => e.url)
-                  .toList())
+              urls: widget.model.evaluationImgList.map((e) => e.url).toList())
         ],
       ),
     );
@@ -320,9 +335,7 @@ class _HouseKeepingDetailPageState extends State<HouseKeepingDetailPage> {
               .softWrap(true)
               .make(),
           BeeGridImageView(
-              urls: widget.model.handlerImgList
-                  .map((e) => e.url)
-                  .toList())
+              urls: widget.model.handlerImgList.map((e) => e.url).toList())
         ],
       ),
     );

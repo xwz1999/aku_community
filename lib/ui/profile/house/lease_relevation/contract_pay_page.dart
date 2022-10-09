@@ -1,3 +1,4 @@
+import 'package:aku_community/widget/bottom_sheets/pay_bottom_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -36,6 +37,13 @@ class _ContractPayPageState extends State<ContractPayPage> {
   @override
   void initState() {
     super.initState();
+    PayUtil().wxPayAddListener(
+        paySuccess: (){
+          Get.off(() => PayFinishPage());
+        },
+        payError: (event) {
+          BotToast.closeAllLoading();
+        });
     Future.delayed(Duration(milliseconds: 300), () async {
       _model = (await HouseFunc().leaseDetail(widget.id));
       if (_model != null) {
@@ -49,6 +57,7 @@ class _ContractPayPageState extends State<ContractPayPage> {
   @override
   void dispose() {
     super.dispose();
+    PayUtil().removeWxPayListener();
   }
 
   @override
@@ -72,7 +81,7 @@ class _ContractPayPageState extends State<ContractPayPage> {
               title: '支付方式',
               hintText: _payMethod,
               onPressed: () async {
-                Get.bottomSheet(PayMethodBottomSheet(onChoose: (value) {
+                Get.bottomSheet(PayBottomSheet(onChoose: (value) {
                   _payMethod = value;
                   Get.back();
                   setState(() {});
@@ -84,17 +93,32 @@ class _ContractPayPageState extends State<ContractPayPage> {
         child: '点击支付'.text.size(32.sp).bold.color(ktextPrimary).make(),
         onPressed: () async {
           Function cancel = BotToast.showLoading();
+          print(_payMethod);
           try {
-            String code = await HouseFunc()
-                .leaseAlipay(widget.id, 1, _model!.margin.toDouble());
-            if (code.isNotEmpty) {
-              bool result =
-                  await PayUtil().callAliPay(code, API.pay.leaseCheckAlipay);
-              if (result) {
-                Get.off(() => PayFinishPage());
-              }
+            if( _payMethod=='支付宝')
+           {
+             String code = await HouseFunc()
+                 .leaseAlipay(widget.id, 1, _model!.margin.toDouble());
+             if (code.isNotEmpty) {
+               bool result =
+               await PayUtil().callAliPay(code, API.pay.leaseCheckAlipay);
+               if (result) {
+                 Get.off(() => PayFinishPage());
+               }
+             }
+           }else if(_payMethod=='微信'){
+              await HouseFunc()
+                  .leaseVxPay(widget.id, 2, _model!.margin.toDouble()).then((value) {
+                if(value!=null){
+                  PayUtil().callWxPay(payModel: value);
+                }
+              });
+            }else{
+              BotToast.showText(text: '请先选择支付方式');
             }
+
           } catch (e) {
+            print(e.toString());
             LoggerData.addData(e);
           }
           cancel();

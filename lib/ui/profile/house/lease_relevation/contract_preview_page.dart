@@ -1,8 +1,9 @@
 import 'dart:typed_data';
 
+import 'package:advance_pdf_viewer_fork/advance_pdf_viewer_fork.dart';
 import 'package:flutter/material.dart';
 
-import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
+
 import 'package:bot_toast/bot_toast.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -32,6 +33,7 @@ class _ContractPreviewPageState extends State<ContractPreviewPage> {
   Uint8List? _signName;
   PDFDocument? doc;
   int _currentPage = -1;
+  PageController? _pageController = PageController();
   @override
   void initState() {
     Future.delayed(Duration(milliseconds: 300), () async {
@@ -80,10 +82,11 @@ class _ContractPreviewPageState extends State<ContractPreviewPage> {
                 ? SizedBox()
                 : PDFViewer(
                     showPicker: false,
-                    onPageChanged: (value) {
-                      _currentPage = value;
-                      setState(() {});
-                    },
+                    controller: _pageController,
+                    // onPageChanged: (value) {
+                    //   _currentPage = value;
+                    //   setState(() {});
+                    // },
                     document: doc!),
           ),
           Positioned(

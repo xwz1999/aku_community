@@ -1,10 +1,10 @@
+import 'package:aku_community/ui/profile/house/house_func.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 import 'package:aku_community/base/base_style.dart';
 import 'package:aku_community/constants/api.dart';
@@ -24,13 +24,23 @@ class IndustryCommitteePage extends StatefulWidget {
 
 class _IndustryCommitteePageState extends State<IndustryCommitteePage> {
   EasyRefreshController _refreshController = EasyRefreshController();
+  String phone = '';
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(milliseconds: 300), () async {
+      phone = await HouseFunc().getPhone();
+      setState(() {});
+    });
+  }
 
   Widget _buildBottomNavi() {
     return [
       MaterialButton(
         onPressed: () {
           Get.dialog(CupertinoAlertDialog(
-            title: '0574-87760023'.text.isIntrinsic.make(),
+            title: phone.text.isIntrinsic.make(),
             actions: [
               CupertinoDialogAction(
                 child: '取消'.text.isIntrinsic.make(),
@@ -39,7 +49,7 @@ class _IndustryCommitteePageState extends State<IndustryCommitteePage> {
               CupertinoDialogAction(
                 child: '呼叫'.text.isIntrinsic.orange500.make(),
                 onPressed: () {
-                  launch('tel:10086');
+                  launch('tel:$phone');
                   Get.back();
                 },
               ),

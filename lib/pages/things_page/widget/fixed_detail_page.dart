@@ -6,11 +6,13 @@ import 'package:aku_community/pages/life_pay/pay_finish_page.dart';
 import 'package:aku_community/pages/life_pay/pay_util.dart';
 import 'package:aku_community/pages/manager_func.dart';
 import 'package:aku_community/pages/things_page/widget/fixed_evaluate_page.dart';
+import 'package:aku_community/ui/profile/house/house_func.dart';
 import 'package:aku_community/utils/bee_map.dart';
 import 'package:aku_community/utils/headers.dart';
 import 'package:aku_community/utils/network/base_model.dart';
 import 'package:aku_community/widget/bee_divider.dart';
 import 'package:aku_community/widget/bee_scaffold.dart';
+import 'package:aku_community/widget/bottom_sheets/pay_bottom_sheet.dart';
 import 'package:aku_community/widget/views/horizontal_image_view.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:power_logger/power_logger.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -41,6 +44,7 @@ class CancelModel {
 class _FixedDetailPageState extends State<FixedDetailPage> {
   bool _onLoading = true;
   EasyRefreshController _easyRefreshController = EasyRefreshController();
+  String _payMethod = '支付宝';
   late FixDetailModel _model;
   bool get showRepairCard => _model.appDispatchListVo != null;
   bool get showProcessCard => _model.appProcessRecordVo.isNotEmpty;
@@ -391,22 +395,46 @@ class _FixedDetailPageState extends State<FixedDetailPage> {
   }
 
   Future _payOnAliy() async {
-    Function cancel = BotToast.showLoading();
-    BaseModel baseModel = await ManagerFunc.reportRepairAlipay(
-        _model.appReportRepairVo.id,
-        (_model.appMaintenanceResultVo!.totalCost ?? 0).toDouble());
-    if ((baseModel.status ?? false) && !baseModel.message.isEmptyOrNull) {
-      bool result = await PayUtil()
-          .callAliPay(baseModel.message!, API.pay.reportReapirCheck);
-      if (result) {
-        Get.back();
-        Get.off(() => PayFinishPage());
-      }
-    } else {
+    Get.bottomSheet(PayBottomSheet(onChoose: (value) async {
+      _payMethod = value;
       Get.back();
-      BotToast.showText(text: '订单生成失败');
-    }
-    cancel();
+      setState(() {});
+      Function cancel = BotToast.showLoading();
+      try {
+        if( _payMethod=='支付宝')
+        {
+          BaseModel baseModel = await ManagerFunc.reportRepairAlipay(
+              _model.appReportRepairVo.id,
+              (_model.appMaintenanceResultVo!.totalCost ?? 0).toDouble());
+          if ((baseModel.status ?? false) && !baseModel.message.isEmptyOrNull) {
+            bool result = await PayUtil()
+                .callAliPay(baseModel.message!, API.pay.reportReapirCheck);
+            if (result) {
+              Get.back();
+              Get.off(() => PayFinishPage());
+            }
+          } else {
+            Get.back();
+            BotToast.showText(text: '订单生成失败');
+          }
+        }else if(_payMethod=='微信'){
+          await HouseFunc()
+              .reportRepairVxPay(_model.appReportRepairVo.id,
+              (_model.appMaintenanceResultVo!.totalCost ?? 0).toDouble()).then((value) {
+            if(value!=null){
+              PayUtil().callWxPay(payModel: value);
+            }
+          });
+        }else{
+          BotToast.showText(text: '请先选择支付方式');
+        }
+
+      } catch (e) {
+        print(e.toString());
+        LoggerData.addData(e);
+      }
+      cancel();
+    }));
   }
 
   Future _comPleteWithoutPay() async {

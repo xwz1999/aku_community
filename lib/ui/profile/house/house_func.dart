@@ -5,6 +5,7 @@ import 'package:aku_community/constants/api.dart';
 import 'package:aku_community/models/house/lease_detail_model.dart';
 import 'package:aku_community/models/house/lease_echo_model.dart';
 import 'package:aku_community/models/house/submit_model.dart';
+import 'package:aku_community/models/pay/wx_pay_model.dart';
 import 'package:aku_community/models/user/passed_house_list_model.dart';
 import 'package:aku_community/utils/network/base_file_model.dart';
 import 'package:aku_community/utils/network/base_model.dart';
@@ -12,6 +13,19 @@ import 'package:aku_community/utils/network/net_util.dart';
 import 'package:bot_toast/bot_toast.dart';
 
 class HouseFunc {
+
+  ///查询业委会的手机号
+  Future<String> getPhone() async {
+    BaseModel model =
+    await NetUtil().get(API.manager.findOwnersTel);
+    if (model.status ?? false) {
+      return model.data ?? '';
+    } else {
+      return '';
+    }
+  }
+
+
   ///查询所有的房屋审核信息
   static Future<List<PassedHouseListModel>> get examineHouses async {
     BaseModel model = await NetUtil().get(API.user.examineHouseList);
@@ -185,6 +199,22 @@ class HouseFunc {
     }
   }
 
+  Future<WxPayModel?> leaseVxPay(int id, int type, double price) async {
+    var baseModel = await NetUtil().post(API.pay.leaseVxPay, params: {
+      "sysLeaseId": id,
+      "payType": type,
+      "payPrice": price,
+    });
+    if (baseModel.status ?? false) {
+      var wxPayModel = WxPayModel.fromJson(baseModel.data);
+      print(wxPayModel);
+      return wxPayModel;
+    } else {
+      return null;
+    }
+  }
+
+
   ///上传腾空单
   Future<List<String>> uploadClearingSingle(List<File> files) async {
     List<String> urls =
@@ -268,4 +298,130 @@ class HouseFunc {
   };
 
   static Map<int, String> toType = {1: '一类人才', 2: '二类人才', 3: '三类人才'};
+
+
+
+  Future<WxPayModel?> dailyPaymentVxPay(List<int>  id, int type, String price) async {
+    var baseModel = await NetUtil().post(API.pay.dailyPayMentVxPay, params: {
+      "ids": id,
+      "payType": type,
+      "payPrice": price,
+    });
+    if (baseModel.status ?? false) {
+      var wxPayModel = WxPayModel.fromJson(baseModel.data);
+      print(wxPayModel);
+      return wxPayModel;
+    } else {
+      return null;
+    }
+  }
+
+
+  Future<WxPayModel?> dailPaymentPreVxPay(int id, int type, String price) async {
+    var baseModel = await NetUtil().post(API.pay.dailPaymentPreVxPay, params: {
+      "estateId": id,
+      "payType": type,
+      "payPrice": price,
+    });
+    if (baseModel.status ?? false) {
+      var wxPayModel = WxPayModel.fromJson(baseModel.data);
+      print(wxPayModel);
+      return wxPayModel;
+    } else {
+      return null;
+    }
+  }
+
+
+
+
+  Future<WxPayModel?> shareVxPayOrderCode(List<int>  id, int type, String price) async {
+    var baseModel = await NetUtil().post(API.pay.shareVxPayOrderCode, params: {
+      "ids": id,
+      "payType": type,
+      "payPrice": price,
+    });
+    if (baseModel.status ?? false) {
+      var wxPayModel = WxPayModel.fromJson(baseModel.data);
+      print(wxPayModel);
+      return wxPayModel;
+    } else {
+      return null;
+    }
+  }
+
+  Future<WxPayModel?> shoppingVxPay(int id, String userName, String userTel,int num, int type,double price) async {
+    var baseModel = await NetUtil().post(API.pay.shoppingVxPay, params: {
+      'goodsId': id,
+      'userName': userName,
+      'userTel': userTel,
+      'num': num,
+      'payType': type,
+      'payPrice': price,
+    });
+    if (baseModel.status ?? false) {
+      var wxPayModel = WxPayModel.fromJson(baseModel.data);
+      print(wxPayModel);
+      return wxPayModel;
+    } else {
+      return null;
+    }
+  }
+
+  Future<WxPayModel?> reportRepairVxPay(int? id, double total) async {
+    var baseModel = await NetUtil().post(API.pay.reportRepairVxPay, params: {
+      'repairId': id,
+      'payType': 2,
+      'payPrice': total,
+    });
+    if (baseModel.status ?? false) {
+      var wxPayModel = WxPayModel.fromJson(baseModel.data);
+      print(wxPayModel);
+      return wxPayModel;
+    } else {
+      return null;
+    }
+  }
+
+  Future<WxPayModel?> leaseRentOrderVxPay(int id, int type, double price) async {
+    var baseModel = await NetUtil().post(API.pay.leaseRentOrderVxPay, params: {
+      "sysLeaseId": id, "payType": type, "payPrice": price
+    });
+    if (baseModel.status ?? false) {
+      var wxPayModel = WxPayModel.fromJson(baseModel.data);
+      print(wxPayModel);
+      return wxPayModel;
+    } else {
+      return null;
+    }
+  }
+
+
+  Future<WxPayModel?> leaseRentBillOrderVxPay(int id, int type, double price) async {
+    var baseModel = await NetUtil().post(API.pay.leaseRentBillOrderVxPay, params: {
+      "sysLeaseRentId": id, "payType": type, "payPrice": price
+    });
+    if (baseModel.status ?? false) {
+      var wxPayModel = WxPayModel.fromJson(baseModel.data);
+      print(wxPayModel);
+      return wxPayModel;
+    } else {
+      return null;
+    }
+  }
+
+  Future<WxPayModel?> housekeepingServiceOrderVxPay(int id, int type, double price) async {
+    var baseModel = await NetUtil().post(API.pay.housekeepingServiceOrderVxPay, params: {
+      "housekeepingServiceId": id, "payType": type, "payPrice": price
+    });
+    if (baseModel.status ?? false) {
+      var wxPayModel = WxPayModel.fromJson(baseModel.data);
+      print(wxPayModel);
+      return wxPayModel;
+    } else {
+      return null;
+    }
+  }
+
+
 }

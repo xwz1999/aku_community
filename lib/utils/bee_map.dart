@@ -39,7 +39,7 @@ class BeeMap {
   };
   static Map<int, String> goodsOutStatus = {1: '审核中', 2: '审核通过', 3: '审核失败'};
 
-  static Map<int, String> borrowStatus = {1: '出借中', 2: '已归还', 3: '待检查'};
+  static Map<int, String> borrowStatus = {1: '出借中', 2: '已归还', 3: '待检查',-1:'审核中'};
 
   static Map<int, String> votingStatus = {
     1: '未开始',

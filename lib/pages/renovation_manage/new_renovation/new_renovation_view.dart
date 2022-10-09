@@ -8,9 +8,11 @@ import 'package:aku_community/pages/renovation_manage/new_renovation/new_renovat
 import 'package:aku_community/pages/things_page/widget/bee_list_view.dart';
 import 'package:aku_community/utils/headers.dart';
 
+GlobalKey<_NewRenovationViewState> childKey = GlobalKey();
+
 class NewRenovationView extends StatefulWidget {
   final int index;
-  NewRenovationView({Key? key, required this.index}) : super(key: key);
+  NewRenovationView({Key? key, required this.index,}) : super(key: key);
 
   @override
   _NewRenovationViewState createState() => _NewRenovationViewState();
@@ -29,6 +31,10 @@ class _NewRenovationViewState extends State<NewRenovationView>
   void dispose() {
     _refreshController.dispose();
     super.dispose();
+  }
+
+  void callRefresh() {
+    return _refreshController.callRefresh();
   }
 
   @override

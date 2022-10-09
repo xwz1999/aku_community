@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 import 'package:get/get.dart';
 
@@ -18,6 +19,7 @@ class NewRenovationPage extends StatefulWidget {
 
 class _NewRenovationPageState extends State<NewRenovationPage>
     with TickerProviderStateMixin {
+  late EasyRefreshController _refreshController;
   List<String> _tabs = [
     '申请中',
     '装修中',
@@ -31,6 +33,7 @@ class _NewRenovationPageState extends State<NewRenovationPage>
   @override
   void initState() {
     super.initState();
+    _refreshController = EasyRefreshController();
     _tabController = TabController(length: _tabs.length, vsync: this);
   }
 
@@ -58,8 +61,13 @@ class _NewRenovationPageState extends State<NewRenovationPage>
               CupertinoIcons.plus_circle,
               color: Colors.black,
             ),
-            onPressed: () {
-              Get.to(() => NewRenovationAddPage());
+            onPressed: () async {
+              var back =
+             await Get.to(() => NewRenovationAddPage());
+              if(back!=null&&back){
+                print('刷新触发');
+                childKey.currentState!.callRefresh();
+              }
             }),
       ],
       body: TabBarView(
@@ -72,11 +80,11 @@ class _NewRenovationPageState extends State<NewRenovationPage>
   _getViews(index) {
     if (index > 2) {
       return NewRenovationView(
-        index: index + 1,
+        index: index + 1, key: childKey,
       );
     } else {
       return NewRenovationView(
-        index: index,
+        index: index, key: childKey,
       );
     }
   }

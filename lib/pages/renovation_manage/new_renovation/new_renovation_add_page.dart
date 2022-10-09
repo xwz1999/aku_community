@@ -76,7 +76,7 @@ class _NewRenovationAddPageState extends State<NewRenovationAddPage> {
                       showMessage: true);
 
               if (baseModel.status ?? false) {
-                Get.back();
+                Get.back(result: true);
               }
             } else {
               BotToast.showText(text: '您未拥有通过审核的房产!');

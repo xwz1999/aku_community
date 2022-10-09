@@ -1,9 +1,9 @@
 {
-    "appName": "智慧小区",
+    "appName": "人才公寓",
     "@appName":{
         "description": "应用名称"
     },
-    "tempPlotName": "人才公寓智慧小区",
+    "tempPlotName": "金融人才公寓",
     "@tempPlotName":{
         "description": "临时使用的小区名称"
     }

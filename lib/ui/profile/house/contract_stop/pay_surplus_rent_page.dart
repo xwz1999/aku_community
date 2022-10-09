@@ -1,3 +1,4 @@
+import 'package:aku_community/widget/bottom_sheets/pay_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bot_toast/bot_toast.dart';
@@ -77,30 +78,59 @@ class _PaySuerplusRentPageState extends State<PaySuerplusRentPage> {
       ),
       bottomNavi: BottomButton(
           onPressed: () async {
-            Function cancel = BotToast.showLoading();
-            try {
-              if (widget.amount > 0) {
-                String code = await HouseFunc()
-                    .leaseRentOrder(widget.id, 1, widget.amount.toDouble());
-                bool result =
+            Get.bottomSheet(PayBottomSheet(onChoose: (value) async {
+              _payMethod = value;
+              Get.back();
+              setState(() {});
+              Function cancel = BotToast.showLoading();
+              try {
+                if( _payMethod=='支付宝')
+                {
+                  if (widget.amount > 0) {
+                    String code = await HouseFunc()
+                        .leaseRentOrder(widget.id, 1, widget.amount.toDouble());
+                    bool result =
                     await PayUtil().callAliPay(code, API.pay.leaseRentCheck);
-                if (result) {
-                  Get.back();
-                  Get.off(() => PayFinishPage());
+                    if (result) {
+                      Get.back();
+                      Get.off(() => PayFinishPage());
+                    }
+                  } else {
+                    bool result = await HouseFunc().leaseRentOrderNegative(
+                        widget.id, widget.amount.toDouble());
+                    if (result) {
+                      Get.back();
+                      Get.back();
+                      BotToast.showText(text: '退款成功');
+                    }
+                  }
+                }else if(_payMethod=='微信'){
+                  if(widget.amount > 0){
+                    await HouseFunc()
+                        .leaseRentOrderVxPay(widget.id, 2, widget.amount.toDouble()).then((value) {
+                      if(value!=null){
+                        PayUtil().callWxPay(payModel: value);
+                      }
+                    });
+                  }else{
+                    bool result = await HouseFunc().leaseRentOrderNegative(
+                        widget.id, widget.amount.toDouble());
+                    if (result) {
+                      Get.back();
+                      Get.back();
+                      BotToast.showText(text: '退款成功');
+                    }
+                  }
+                }else{
+                  BotToast.showText(text: '请先选择支付方式');
                 }
-              } else {
-                bool result = await HouseFunc().leaseRentOrderNegative(
-                    widget.id, widget.amount.toDouble());
-                if (result) {
-                  Get.back();
-                  Get.back();
-                  BotToast.showText(text: '退款成功');
-                }
+
+              } catch (e) {
+                print(e.toString());
+                LoggerData.addData(e);
               }
-            } catch (e) {
-              LoggerData.addData(e);
-            }
-            cancel();
+              cancel();
+            }));
           },
           child: '${widget.amount > 0 ? '点击支付' : '点击退款'}'
               .text

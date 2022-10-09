@@ -20,7 +20,11 @@ class PayMethodBottomSheet extends StatelessWidget {
         CupertinoActionSheetAction(
             onPressed: () => onChoose('支付宝'),
             child:
-                '支付宝'.text.size(32.sp).color(ktextPrimary).isIntrinsic.make())
+                '支付宝'.text.size(32.sp).color(ktextPrimary).isIntrinsic.make()),
+        CupertinoActionSheetAction(
+            onPressed: () => onChoose('微信'),
+            child:
+            '微信'.text.size(32.sp).color(ktextPrimary).isIntrinsic.make())
       ],
     );
   }

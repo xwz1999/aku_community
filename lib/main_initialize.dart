@@ -90,7 +90,16 @@ class MainInitialize {
 
   static initWechat() {
     if (kIsWeb || Platform.isMacOS) return;
-    registerWxApi(appId: AppConfig.wechatAppId);
+    //registerWxApi(appId: AppConfig.wechatAppId);
+    registerWxApi(
+        appId: AppConfig.wechatAppId,
+        doOnIOS: ! Platform.isAndroid,
+        doOnAndroid:  Platform.isAndroid,).then((value) {
+          if(value){
+            print('注册成功');
+          }
+    });
+
   }
 
   static initWebSocket() {

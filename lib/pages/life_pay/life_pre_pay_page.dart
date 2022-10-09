@@ -1,3 +1,4 @@
+import 'package:aku_community/ui/profile/house/house_func.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -127,7 +128,7 @@ class _LifePrePayPageState extends State<LifePrePayPage> {
                 '缴费方式'.text.size(28.sp).black.make(),
                 Spacer(),
                 Image.asset(
-                  R.ASSETS_ICONS_ALIPAY_ROUND_PNG,
+                  _payMethod=='微信'? R.ASSETS_ICONS_IC_WX_PNG:R.ASSETS_ICONS_IC_ZFB_PNG,
                   width: 48.w,
                   height: 48.w,
                 ),
@@ -155,21 +156,35 @@ class _LifePrePayPageState extends State<LifePrePayPage> {
           onPressed: () async {
             Function cancel = BotToast.showLoading();
             try {
-              BaseModel baseModel =
-                  await NetUtil().post(API.pay.dailPaymentPrePay, params: {
-                "estateId": UserTool.appProveider.selectedHouse!.estateId,
-                "payType": 1,
-                "payPrice": _editingController.text
-              });
-              if (baseModel.status ?? false) {
-                bool result = await PayUtil().callAliPay(
-                    baseModel.message!, API.pay.dailPaymentPrePayCheck);
-                if (result) {
-                  Get.off(() => PayFinishPage());
+              if( _payMethod=='支付宝')
+              {
+                BaseModel baseModel =
+                await NetUtil().post(API.pay.dailPaymentPrePay, params: {
+                  "estateId": UserTool.appProveider.selectedHouse!.estateId,
+                  "payType": 1,
+                  "payPrice": _editingController.text
+                });
+                if (baseModel.status ?? false) {
+                  bool result = await PayUtil().callAliPay(
+                      baseModel.message!, API.pay.dailPaymentPrePayCheck);
+                  if (result) {
+                    Get.off(() => PayFinishPage());
+                  }
+                } else {
+                  BotToast.showText(text: baseModel.message ?? "");
                 }
-              } else {
-                BotToast.showText(text: baseModel.message ?? "");
+              }else if(_payMethod=='微信'){
+                await HouseFunc()
+                    .dailPaymentPreVxPay(UserTool.appProveider.selectedHouse!.estateId, 2, _editingController.text).then((value) {
+                  if(value!=null){
+                    PayUtil().callWxPay(payModel: value);
+                  }
+                });
+              }else{
+                BotToast.showText(text: '请先选择支付方式');
               }
+
+
             } catch (e) {
               LoggerData.addData(e);
             }

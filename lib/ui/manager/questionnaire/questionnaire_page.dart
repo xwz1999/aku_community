@@ -45,10 +45,15 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
   Widget _buildCard(QuestionnaireModel model) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => QuestionnaireDetailPage(
-              id: model.id,
-              status: model.status,
-            ));
+        // Get.to(() => QuestionnaireDetailPage(
+        //       id: model.id,
+        //       status: model.status,
+        //     ));
+        if (model.status == 2) {
+          Get.to(() => QuestionnaireDetailPage(
+            id: model.id,
+          ));
+        }
       },
       child: Container(
         decoration: BoxDecoration(

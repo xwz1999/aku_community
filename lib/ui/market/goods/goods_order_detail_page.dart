@@ -6,11 +6,13 @@ import 'package:aku_community/model/common/img_model.dart';
 import 'package:aku_community/models/market/goods_detail_model.dart';
 import 'package:aku_community/pages/life_pay/pay_finish_page.dart';
 import 'package:aku_community/pages/life_pay/pay_util.dart';
+import 'package:aku_community/ui/profile/house/house_func.dart';
 import 'package:aku_community/ui/profile/house/house_owners_page.dart';
 import 'package:aku_community/utils/network/base_model.dart';
 import 'package:aku_community/utils/network/net_util.dart';
 import 'package:aku_community/widget/bee_divider.dart';
 import 'package:aku_community/widget/bee_scaffold.dart';
+import 'package:aku_community/widget/bottom_sheets/pay_bottom_sheet.dart';
 import 'package:aku_community/widget/buttons/bee_numberic_button.dart';
 import 'package:aku_community/widget/buttons/bottom_button.dart';
 import 'package:aku_community/widget/others/user_tool.dart';
@@ -19,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:power_logger/power_logger.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 class GoodsOrderDetailPage extends StatefulWidget {
@@ -36,7 +39,7 @@ class GoodsOrderDetailPage extends StatefulWidget {
 class _GoodsOrderDetailPageState extends State<GoodsOrderDetailPage> {
   late EasyRefreshController _refreshController;
   bool _onload = true;
-
+  String _payMethod = '支付宝';
   ///商品数量
   int _num = 1;
   @override
@@ -86,30 +89,53 @@ class _GoodsOrderDetailPageState extends State<GoodsOrderDetailPage> {
       ),
       bottomNavi: BottomButton(
           onPressed: () async {
-            final cancel = BotToast.showLoading();
-            BaseModel baseModel = await NetUtil().post(
-              API.pay.shoppingAlipay,
-              params: {
-                'goodsId': widget.model.id,
-                'userName': widget.name,
-                'userTel': widget.phone,
-                'num': _num,
-                'payType': 1,
-                'payPrice': widget.model.sellingPrice,
-              },
-              showMessage: false,
-            );
-            if ((baseModel.status ?? false) &&
-                !baseModel.message.isEmptyOrNull) {
-              bool result = await PayUtil()
-                  .callAliPay(baseModel.message!, API.pay.shoppingCheck);
-              if (result) {
-                Get.off(() => PayFinishPage());
+            Get.bottomSheet(PayBottomSheet(onChoose: (value) async {
+              _payMethod = value;
+              Get.back();
+              setState(() {});
+              Function cancel = BotToast.showLoading();
+              try {
+                if( _payMethod=='支付宝')
+                {
+                  BaseModel baseModel = await NetUtil().post(
+                    API.pay.shoppingAlipay,
+                    params: {
+                      'goodsId': widget.model.id,
+                      'userName': widget.name,
+                      'userTel': widget.phone,
+                      'num': _num,
+                      'payType': 1,
+                      'payPrice': widget.model.sellingPrice,
+                    },
+                    showMessage: false,
+                  );
+                  if ((baseModel.status ?? false) &&
+                      !baseModel.message.isEmptyOrNull) {
+                    bool result = await PayUtil()
+                        .callAliPay(baseModel.message!, API.pay.shoppingCheck);
+                    if (result) {
+                      Get.off(() => PayFinishPage());
+                    }
+                  } else {
+                    BotToast.showText(text: baseModel.message!);
+                  }
+                }else if(_payMethod=='微信'){
+                  await HouseFunc()
+                      .shoppingVxPay(widget.model.id,widget.name,widget.phone,_num,2, widget.model.sellingPrice,).then((value) {
+                    if(value!=null){
+                      PayUtil().callWxPay(payModel: value);
+                    }
+                  });
+                }else{
+                  BotToast.showText(text: '请先选择支付方式');
+                }
+
+              } catch (e) {
+                print(e.toString());
+                LoggerData.addData(e);
               }
-            } else {
-              BotToast.showText(text: baseModel.message!);
-            }
-            cancel();
+              cancel();
+            }));
           },
           child: '立即支付'.text.size(32.sp).color(ktextPrimary).bold.make()),
     );

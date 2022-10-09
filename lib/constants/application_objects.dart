@@ -131,7 +131,7 @@ List<AO> userAppObjects = [
       '我的房屋',
       R.ASSETS_ICONS_USER_ICON_WDFW_PNG,
       () => HouseOwnersPage(
-            identify: UserTool.userProvider.userDetailModel!.type ?? 4,
+            identify: UserTool.userProvider.userDetailModel==null?4: UserTool.userProvider.userDetailModel!.type ?? 4,
           )),
   AO('我的车位', R.ASSETS_ICONS_USER_ICON_WDCW_PNG, () => CarParkingPage()),
   AO('我的车', R.ASSETS_ICONS_USER_ICON_WDC_PNG, () => CarManagePage()),

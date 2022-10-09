@@ -1,6 +1,6 @@
 class API {
   ///HOST
-  static const String host = 'http://test.kaidalai.cn/';
+  static const String host = 'http://test.kaidalai.cn';
 
   ///接口基础地址
   static const String baseURL = '$host/api/app';
@@ -24,6 +24,8 @@ class API {
   static _Search search = _Search();
   static _Pay pay = _Pay();
   static _House house = _House();
+
+
 }
 
 class _Login {
@@ -117,6 +119,9 @@ class _Manager {
 
   ///获取业委会列表
   String get commiteeStaff => '/ownersCommittee/findAll';
+
+  ///获取业委会手机号码
+  String get findOwnersTel => '/ownersCommittee/findOwnersTel';
 
   ///获取便民电话联系人列表
   String get convenientPhone => '/convenientTelephone/list';
@@ -493,17 +498,30 @@ class _Facility {
 }
 
 class _Pay {
+
+  ///日常缴费 微信支付
+  String get dailyPayMentVxPay => '/user/vx/dailyPaymentVxPay';
+
   ///日常缴费 支付宝支付
   String get dailyPayMentAliPay => '/user/alipay/dailyPaymentAlipay';
 
   ///日常缴费 查询支付宝订单状态
   String get dailPayMentCheck => '/user/alipay/dailyPaymentCheckAlipay';
 
+
+  ///微信支付：app 商城购物完成订单支付宝支付(生成 APP 支付订单信息)
+  String get shoppingVxPay => '/user/vx/shoppingVxPay';
+
   ///支付宝支付：app 商城购物完成订单支付宝支付(生成 APP 支付订单信息)
   String get shoppingAlipay => '/user/alipay/shoppingAlipay';
 
+
   ///支付宝支付：商城购物 向支付宝发起订单查询请求
   String get shoppingCheck => '/user/alipay/shoppingCheckAlipay';
+
+
+  ///微信支付：app 报事报修完成订单微信支付
+  String get reportRepairVxPay => '/user/vx/reportRepairVxPay';
 
   ///支付宝支付：app 报事报修完成订单支付宝支付
   String get reportRepairAlipay => '/user/alipay/reportRepairAlipay';
@@ -514,14 +532,26 @@ class _Pay {
   ///支付宝支付：app 房屋租赁完成订单支付宝支付(异步通知有可能会有问题)
   String get leaseAlipay => '/user/alipay/leaseAlipay';
 
+  ///微信支付：app 房屋租赁完成订单微信支付(异步通知有可能会有问题)
+  String get leaseVxPay => '/user/vx/leaseVxPay';
+
+
   ///支付宝支付：房屋租赁 向支付宝发起订单查询请求
   String get leaseCheckAlipay => '/user/alipay/leaseCheckAlipay';
+
+
+  ///微信支付：app 房屋租赁-剩余需结清房租支付 完成订单微信支付(生成 APP 支付订单信息)
+  String get leaseRentOrderVxPay => '/user/vx/leaseRentOrderVxPay';
 
   ///支付宝支付：app 房屋租赁-剩余需结清房租支付 完成订单支付宝支付(生成 APP 支付订单信息)
   String get leaseRentOrderAlipay => '/user/alipay/leaseRentOrderAlipay';
 
   ///支付宝支付：房屋租赁-剩余需结清房租支付 向支付宝发起订单查询请求
   String get leaseRentCheck => '/user/alipay/leaseRentOrderCheckAlipay';
+
+
+  ///微信支付：app 房屋租赁-租金账单支付 完成订单微信支付(生成 APP 支付订单信息)
+  String get leaseRentBillOrderVxPay => '/user/vx/leaseRentBillOrderVxPay';
 
   ///支付宝支付：app 房屋租赁-租金账单支付 完成订单支付宝支付(生成 APP 支付订单信息)
   String get leaseRentBillorder => '/user/alipay/leaseRentBillOrderAlipay';
@@ -533,12 +563,24 @@ class _Pay {
   ///我的房屋-合同终止：app 房屋租赁-剩余需结清租金支付(当剩余需结清租金 小于等于 0 时调用)：
   String get leaseRentOrderNegative => '/user/myHouse/leaseRentOrderAlipay';
 
+
   ///支付宝支付：app 生活缴费-预充值支付 完成订单支付宝支付(生成 APP 支付订单信息)
   String get dailPaymentPrePay => '/user/alipay/advancePaymentOrderAlipay';
+
+
+  ///微信支付：app 生活缴费-预充值支付 完成订单支付宝支付(生成 APP 支付订单信息)
+  String get dailPaymentPreVxPay => '/user/vx/advancePaymentOrderVxPay';
 
   ///支付宝支付：生活缴费-预充值支付 向支付宝发起订单查询请求
   String get dailPaymentPrePayCheck =>
       '/user/alipay/advancePaymentOrderCheckAlipay';
+
+
+
+  ///微信支付：app 家政服务-服务费用支付 完成订单微信支付(生成 APP 支付订单信息)
+  String get housekeepingServiceOrderVxPay =>
+      '/user/vx/housekeepingServiceOrderVxPay';
+
 
   ///支付宝支付：app 家政服务-服务费用支付 完成订单支付宝支付(生成 APP 支付订单信息)
   String get houseKeepingServiceOrderAlipay =>
@@ -547,6 +589,13 @@ class _Pay {
   ///支付宝支付：家政服务-服务费用支付 向支付宝发起订单查询请求
   String get houseKeepingServieceOrderCheck =>
       '/user/alipay/housekeepingServiceOrderCheckAlipay';
+
+
+
+  ///app 抄表记录管理-抄表分摊详情费用支付 完成微信支付宝支付(生成 APP 支付订单信息)
+  String get shareVxPayOrderCode =>
+      '/user/vx/meterReadingShareDetailsOrderVxPay';
+
 
   ///app 抄表记录管理-抄表分摊详情费用支付 完成订单支付宝支付(生成 APP 支付订单信息)
   String get sharePayOrderCode =>
