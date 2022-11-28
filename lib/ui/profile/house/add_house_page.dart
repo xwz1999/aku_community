@@ -1,4 +1,6 @@
 import 'package:aku_community/constants/api.dart';
+import 'package:aku_community/model/user/user_detail_model.dart';
+import 'package:aku_community/pages/sign/sign_func.dart';
 import 'package:aku_community/ui/profile/house/house_item.dart';
 import 'package:aku_community/ui/profile/house/pick_building_page.dart';
 import 'package:aku_community/ui/profile/house/pick_role_page.dart';
@@ -147,6 +149,21 @@ class _AddHousePageState extends State<AddHousePage> {
         ],
       ),
     );
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero,() async{
+      UserDetailModel? _model = await SignFunc.getUserDetail();
+      if (_model != null) {
+        _roleType = _model.type??1;
+      }
+      setState(() {
+
+      });
+    });
   }
 
   @override

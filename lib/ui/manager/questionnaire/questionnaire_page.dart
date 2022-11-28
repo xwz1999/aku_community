@@ -52,6 +52,7 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
         if (model.status == 2) {
           Get.to(() => QuestionnaireDetailPage(
             id: model.id,
+            status:model.status ,
           ));
         }
       },
@@ -138,6 +139,7 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
                     if (model.status == 2) {
                       Get.to(() => QuestionnaireDetailPage(
                             id: model.id,
+                            status: model.status,
                           ));
                     }
                   },

@@ -4,9 +4,11 @@ import 'package:aku_community/models/user/passed_house_list_model.dart';
 import 'package:aku_community/provider/app_provider.dart';
 import 'package:aku_community/ui/profile/house/add_house_page.dart';
 import 'package:aku_community/ui/profile/house/house_func.dart';
+import 'package:aku_community/ui/profile/house/lease_relevation/tenant_house_list_page.dart';
 import 'package:aku_community/utils/headers.dart';
 import 'package:aku_community/utils/network/net_util.dart';
 import 'package:aku_community/widget/bee_scaffold.dart';
+import 'package:aku_community/widget/others/user_tool.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -99,8 +101,13 @@ class _PickMyHousePageState extends State<PickMyHousePage> {
       bottomNavi: ElevatedButton(
         child: Text('新增房屋'),
         onPressed: () async {
-          bool? result = await Get.to(() => AddHousePage());
-          if (result == true) _refreshController.callRefresh();
+          if(UserTool.userProvider.userDetailModel!.type==3){
+            Get.to(() => TenantHouseListPage());
+          }else{
+            bool? result = await Get.to(() => AddHousePage());
+            if (result == true) _refreshController.callRefresh();
+          }
+
         },
         style: ButtonStyle(
           padding:

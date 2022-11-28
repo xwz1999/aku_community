@@ -127,7 +127,7 @@ class _UserIdentifyPageState extends State<UserIdentifyPage> {
               bool result = await HouseFunc().leaseCertification(
                   _nameController.text,
                   _sex,
-                  _tel,
+                  _telController.text,
                   _indentifyCodeController.text);
               if (result) {
                 Get.off(() => TenantHouseListPage());

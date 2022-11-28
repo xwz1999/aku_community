@@ -1,69 +1,26 @@
 PODS:
-  - advance_pdf_viewer (1.0.5):
+  - advance_pdf_viewer_fork (1.1.7):
     - Flutter
-  - AlipaySDK-iOS (15.7.9)
-  - AMap3DMap (8.0.0):
-    - AMapFoundation (~> 1.6.8)
+  - AMap3DMap (9.5.0):
+    - AMapFoundation (>= 1.8.0)
   - amap_flutter_location (0.0.1):
-    - AMapLocation (~> 2.6.7)
+    - AMapLocation
     - Flutter
   - amap_flutter_map (0.0.1):
     - AMap3DMap
     - Flutter
-  - AMapFoundation (1.6.8)
-  - AMapLocation (2.6.9):
-    - AMapFoundation (~> 1.6.8)
+  - AMapFoundation (1.8.0)
+  - AMapLocation (2.9.0):
+    - AMapFoundation (>= 1.7.0)
   - device_info_plus (0.0.1):
     - Flutter
-  - Firebase/CoreOnly (8.3.0):
-    - FirebaseCore (= 8.3.0)
-  - Firebase/Crashlytics (8.3.0):
-    - Firebase/CoreOnly
-    - FirebaseCrashlytics (~> 8.3.0)
-  - firebase_core (1.4.0):
-    - Firebase/CoreOnly (= 8.3.0)
-    - Flutter
-  - firebase_crashlytics (2.1.1):
-    - Firebase/Crashlytics (= 8.3.0)
-    - firebase_core
-    - Flutter
-  - FirebaseCore (8.3.0):
-    - FirebaseCoreDiagnostics (~> 8.0)
-    - GoogleUtilities/Environment (~> 7.4)
-    - GoogleUtilities/Logger (~> 7.4)
-  - FirebaseCoreDiagnostics (8.6.0):
-    - GoogleDataTransport (~> 9.0)
-    - GoogleUtilities/Environment (~> 7.4)
-    - GoogleUtilities/Logger (~> 7.4)
-    - nanopb (~> 2.30908.0)
-  - FirebaseCrashlytics (8.3.0):
-    - FirebaseCore (~> 8.0)
-    - FirebaseInstallations (~> 8.0)
-    - GoogleDataTransport (~> 9.0)
-    - nanopb (~> 2.30908.0)
-    - PromisesObjC (~> 1.2)
-  - FirebaseInstallations (8.6.0):
-    - FirebaseCore (~> 8.0)
-    - GoogleUtilities/Environment (~> 7.4)
-    - GoogleUtilities/UserDefaults (~> 7.4)
-    - PromisesObjC (< 3.0, >= 1.2)
   - Flutter (1.0.0)
   - fluwx (0.0.1):
     - Flutter
-    - WechatOpenSDK (= 1.8.7.1)
+    - OpenWeChatSDK (~> 1.9.6)
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
-  - GoogleDataTransport (9.1.0):
-    - GoogleUtilities/Environment (~> 7.2)
-    - nanopb (~> 2.30908.0)
-    - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/Environment (7.5.1):
-    - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/Logger (7.5.1):
-    - GoogleUtilities/Environment
-  - GoogleUtilities/UserDefaults (7.5.1):
-    - GoogleUtilities/Logger
   - image_picker (0.0.1):
     - Flutter
   - JCore (2.7.1)
@@ -74,46 +31,37 @@ PODS:
     - JCore (= 2.7.1)
     - JPush (= 3.7.0)
   - MTBBarcodeScanner (5.0.11)
-  - nanopb (2.30908.0):
-    - nanopb/decode (= 2.30908.0)
-    - nanopb/encode (= 2.30908.0)
-  - nanopb/decode (2.30908.0)
-  - nanopb/encode (2.30908.0)
   - open_file (0.0.1):
     - Flutter
+  - OpenWeChatSDK (1.9.6)
   - package_info (0.0.1):
     - Flutter
   - package_info_plus (0.4.5):
     - Flutter
-  - path_provider (0.0.1):
+  - path_provider_ios (0.0.1):
     - Flutter
   - "permission_handler (5.1.0+2)":
     - Flutter
-  - PromisesObjC (1.2.12)
   - qr_code_scanner (0.2.0):
     - Flutter
     - MTBBarcodeScanner
   - share (0.0.1):
     - Flutter
-  - shared_preferences (0.0.1):
+  - shared_preferences_ios (0.0.1):
     - Flutter
   - sqflite (0.0.2):
     - Flutter
     - FMDB (>= 2.7.5)
   - tobias (0.0.1):
-    - AlipaySDK-iOS (~> 15.7.9)
     - Flutter
-  - url_launcher (0.0.1):
+  - url_launcher_ios (0.0.1):
     - Flutter
-  - WechatOpenSDK (1.8.7.1)
 
 DEPENDENCIES:
-  - advance_pdf_viewer (from `.symlinks/plugins/advance_pdf_viewer/ios`)
+  - advance_pdf_viewer_fork (from `.symlinks/plugins/advance_pdf_viewer_fork/ios`)
   - amap_flutter_location (from `.symlinks/plugins/amap_flutter_location/ios`)
   - amap_flutter_map (from `.symlinks/plugins/amap_flutter_map/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
-  - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
-  - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
   - Flutter (from `Flutter`)
   - fluwx (from `.symlinks/plugins/fluwx/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
@@ -121,49 +69,35 @@ DEPENDENCIES:
   - open_file (from `.symlinks/plugins/open_file/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
-  - path_provider (from `.symlinks/plugins/path_provider/ios`)
+  - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - qr_code_scanner (from `.symlinks/plugins/qr_code_scanner/ios`)
   - share (from `.symlinks/plugins/share/ios`)
-  - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
+  - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - tobias (from `.symlinks/plugins/tobias/ios`)
-  - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
+  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
 SPEC REPOS:
   trunk:
-    - AlipaySDK-iOS
     - AMap3DMap
     - AMapFoundation
     - AMapLocation
-    - Firebase
-    - FirebaseCore
-    - FirebaseCoreDiagnostics
-    - FirebaseCrashlytics
-    - FirebaseInstallations
     - FMDB
-    - GoogleDataTransport
-    - GoogleUtilities
     - JCore
     - JPush
     - MTBBarcodeScanner
-    - nanopb
-    - PromisesObjC
-    - WechatOpenSDK
+    - OpenWeChatSDK
 
 EXTERNAL SOURCES:
-  advance_pdf_viewer:
-    :path: ".symlinks/plugins/advance_pdf_viewer/ios"
+  advance_pdf_viewer_fork:
+    :path: ".symlinks/plugins/advance_pdf_viewer_fork/ios"
   amap_flutter_location:
     :path: ".symlinks/plugins/amap_flutter_location/ios"
   amap_flutter_map:
     :path: ".symlinks/plugins/amap_flutter_map/ios"
   device_info_plus:
     :path: ".symlinks/plugins/device_info_plus/ios"
-  firebase_core:
-    :path: ".symlinks/plugins/firebase_core/ios"
-  firebase_crashlytics:
-    :path: ".symlinks/plugins/firebase_crashlytics/ios"
   Flutter:
     :path: Flutter
   fluwx:
@@ -178,64 +112,52 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/package_info/ios"
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
-  path_provider:
-    :path: ".symlinks/plugins/path_provider/ios"
+  path_provider_ios:
+    :path: ".symlinks/plugins/path_provider_ios/ios"
   permission_handler:
     :path: ".symlinks/plugins/permission_handler/ios"
   qr_code_scanner:
     :path: ".symlinks/plugins/qr_code_scanner/ios"
   share:
     :path: ".symlinks/plugins/share/ios"
-  shared_preferences:
-    :path: ".symlinks/plugins/shared_preferences/ios"
+  shared_preferences_ios:
+    :path: ".symlinks/plugins/shared_preferences_ios/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
   tobias:
     :path: ".symlinks/plugins/tobias/ios"
-  url_launcher:
-    :path: ".symlinks/plugins/url_launcher/ios"
+  url_launcher_ios:
+    :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
-  advance_pdf_viewer: 5c832f382b4ca84fe735f893b7e91aa830c27d7b
-  AlipaySDK-iOS: 94ff4c0e17c5e7d126b8207596d5033006534c25
-  AMap3DMap: 89b82eaad00f9246f59d2a6103eff18be5b9dd4f
-  amap_flutter_location: 3e33b57f1aad80b0dfb4b399de857a1a9f071e62
+  advance_pdf_viewer_fork: 7364d9c1ea71ec070d35b78d4341eadbabe84549
+  AMap3DMap: dc972a62d7fe451795e4b3637e377a2cf593d0e7
+  amap_flutter_location: 44ff5beb64f42e0bf5feb402fe299dac0013af6f
   amap_flutter_map: 979e54d227cedac6c7504a2151bfbf3bcf96760a
-  AMapFoundation: 32e9a0264ee62f5aa2aaf82bdafdda7985ce09c7
-  AMapLocation: 3ec0e9bf53800b40cceb313cbd047743f75e2483
+  AMapFoundation: f48153f724114b58da9b01875ab88a1f6856e3db
+  AMapLocation: f5eb11e11c62f0f599f80b578eec8a1f70deb985
   device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
-  Firebase: 817b9171d0d51dccc458b94a5e8edff6b1dd323d
-  firebase_core: 72374607c8c6f5a0adc0559e5c5bf57deda975e3
-  firebase_crashlytics: f5c47b951fb9b494f2bc4212c8aa8de3ed8417cf
-  FirebaseCore: a6dba751680d7033b9d3831e1cfc95ead0605118
-  FirebaseCoreDiagnostics: 3721920bde3a9a6d5aa093c1d25e9d3e47f694af
-  FirebaseCrashlytics: 3d83f2e8a47f476f47c82ff4536b169df6781271
-  FirebaseInstallations: 0ede6ffcd215b8f93c19d9b06c1c54e2d4107e98
-  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
-  fluwx: 07a55ed66bf3a4961e836a2a411b02dcada32902
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  fluwx: 1649fdbdb0a7e24f3a371ca0f302e25dc1c022ab
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  GoogleDataTransport: 85fd18ff3019bb85d3f2c551d04c481dedf71fc9
-  GoogleUtilities: 3df19e3c24f7bbc291d8b5809aa6b0d41e642437
   image_picker: 50e7c7ff960e5f58faa4d1f4af84a771c671bc4a
   JCore: 9d5bda3a172c65bbe14f2806ab0f6246f8a06065
   JPush: 1fd7a326e7e6588eba517659ce1b79a144e54938
   jpush_flutter: d5fd523a73277ed66d453fc7ac1c981d1fa525e2
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
-  nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   open_file: 02eb5cb6b21264bd3a696876f5afbfb7ca4f4b7d
+  OpenWeChatSDK: 8fb6c3c7ce9a57f37d001060282de1f138d09940
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
-  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
+  path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
-  PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   qr_code_scanner: bb67d64904c3b9658ada8c402e8b4d406d5d796e
   share: 0b2c3e82132f5888bccca3351c504d0003b3b410
-  shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
+  shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
-  tobias: 6872e2198dc30e17c10513b9ee114e28d099bc70
-  url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
-  WechatOpenSDK: 6a4d1436c15b3b5fe2a0bd383f3046010186da44
+  tobias: 2aded9b83e3663b907360a800d8e3c13284f25c5
+  url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
 
 PODFILE CHECKSUM: fe0e1ee7f3d1f7d00b11b474b62dd62134535aea
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3

@@ -3,7 +3,7 @@
     "@appName":{
         "description": "应用名称"
     },
-    "tempPlotName": "金融人才公寓",
+    "tempPlotName": "盛邦滨江府",
     "@tempPlotName":{
         "description": "临时使用的小区名称"
     }
